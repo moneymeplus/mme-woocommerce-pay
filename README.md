@@ -1,20 +1,17 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
-
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
-
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+# MoneyMe+ Payment Gateway
+This payment gateway is used in woocommerce e-commerce platform
+## Requirements
+   * WooCommerce
+   * Have a merchant **MME Username** and **MME Password**. For details and subscriptions, visit https://www.moneyme.com.au/
+ 
+## Settings
+Once plugin is installed and met the requirements, you can now manage the MoneyME+ payment gateway on WooCommerce / Wordpress Dashboard. Just go to **WooCommerce** > **Settings**. Under that page, select **Payments** tab then click **Manage**. Below are the descriptions for each settings
+   * **Title** - payment gateway title
+   * **Description** - short description of the payment gateway
+   * **Test mode**
+      * On - will use the sandbox server
+      * Off - will use the live/production MoneyMe+ payment server.
+   * **Test MME Username** - Merchant registered MME+ test username, this will be used if Test Mode is on. To get one, please visit and contact https://www.moneyme.com.au/
+   * **Test MME Password** - Merchant registered MME+ test password, this will be used if Test Mode is on. To get one, please visit and contact https://www.moneyme.com.au/
+   * **Live MME Username** - Merchant registered MME+ username, this will be used if Test Mode is off. To get one, please visit and contact https://www.moneyme.com.au/
+   * **Live MME Password** - Merchant registered MME+ password, this will be used if Test Mode is off. To get one, please visit and contact https://www.moneyme.com.au/
