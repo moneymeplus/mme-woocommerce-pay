@@ -527,7 +527,9 @@ input {
 
 .m-442218.mme-gateway .checkout-header .info-wrap span.help {
     font-size: 12px;
-    color: #fff !important
+    color: #fff !important;
+    background: none !important;
+    border: none !important;
 }
 
 .m-442218.mme-gateway .checkout-header .info-wrap a {
