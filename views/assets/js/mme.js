@@ -501,6 +501,7 @@ jQuery('.modal ').on('shown.bs.modal', function (e) {
     jQuery(".for-remember-wrap").show();
     jQuery(".mme-existing-client").hide();
 })
+
 jQuery("#place_order").click(function(){
     let payment_gateway = jQuery("#payment_method_mme_gateway").val();
         if(payment_gateway == "mme_gateway"){
@@ -508,8 +509,10 @@ jQuery("#place_order").click(function(){
                 let fields = {};
                 let err = 0;
                 jQuery(".validate-required input").each((i, r)=>{
-                    if(jQuery(r).val().trim() == ""){
-                        err ++;
+                    if(jQuery(r).attr("type") != "password"){
+                        if(jQuery(r).val().trim() == ""){
+                            err ++;
+                        }
                     }
                     if(jQuery(r).attr("type") == "email" || jQuery(r).attr("id") == "billing_email"){
                         if(!validateEmail(jQuery(r).val().trim())){
@@ -572,3 +575,26 @@ jQuery(document).ready(()=>{
     }
     
 });
+
+//mus specific code
+jQuery('.modal').on('shown.bs.modal', function (e) {
+    jQuery('.content').css('z-index', '120');
+    jQuery('.title').css('z-index', '90'); //101
+});
+
+jQuery('.modal').on('hidden.bs.modal', function (e) {
+    jQuery('.content').css('z-index', '100');
+    jQuery('.title').css('z-index', '101'); //101
+});
+
+jQuery("[data-target=#mme-signup-container]").on("click", ()=> {
+    jQuery("#mme-signup-container").modal('toggle');
+});
+jQuery("[data-target=#mme-login-container]").on("click", ()=> {
+    jQuery("#mme-login-container").modal('toggle');
+});
+jQuery("[data-target=#mme-forgot-container]").on("click", ()=> {
+    jQuery("#mme-forgot-container").modal('toggle');
+});
+
+//end

@@ -183,7 +183,7 @@ function wc_mme_gateway_init() {
 				$price =  $values['data']->get_price();
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
-				$cartItems[] = $values['quantity'].' - '.$full_title.' - '.$values['data']->get_id().' - '.$price;
+				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
 				$pid[] = $values['data']->get_id();
                 $qty[] = $values['quantity'];
 			}
@@ -217,6 +217,8 @@ function wc_mme_gateway_init() {
 		public function process_payment( $order_id ) {
 			$order = wc_get_order( $order_id );
 			global $woocommerce;
+			wc_add_notice($woocommerce->cart->applied_coupons, 'error' );
+			return false;
 			$items = $woocommerce->cart->get_cart();
 			$cartItems = [];
 			foreach($items as $item => $values) { 
@@ -224,7 +226,7 @@ function wc_mme_gateway_init() {
 				$price =  $values['data']->get_price();
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
-				$cartItems[] = $values['quantity'].' - '.$full_title.' - '.$values['data']->get_id().' - '.$price;
+				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
 				$pid[] = $values['data']->get_id();
                 $qty[] = $values['quantity'];
 				

@@ -83,7 +83,7 @@ viewBox="0 0 834.25 308.08">
         <?php echo $description;?>
     </div>
     
-    <div id="mme-select-container" class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false">
+    <div id="mme-select-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

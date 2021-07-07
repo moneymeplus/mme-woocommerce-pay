@@ -920,17 +920,16 @@ hr.styled-separator.space::before, hr.space.styled-separator::after {
 }
 
 .m-442218 .form-element .inputText {
-    font-size: 20px;
-    width: 100%;
-    height: 40px;
-    border: none;
-    border-bottom: 1px solid #EFEFEF;
-    /*font-family: "Lato-semilight";*/
-    font-weight: 300;
-    padding-bottom: 6px;
-    background: transparent;
-    padding-left: 0;
-    margin-left: 0;
+    font-size: 20px  !important;
+    width: 100%  !important;
+    height: 40px  !important;
+    border: none  !important;
+    border-bottom: 1px solid #EFEFEF  !important;
+    font-weight: 300  !important;
+    padding-bottom: 6px  !important;
+    background: transparent !important;
+    padding-left: 0  !important;
+    margin-left: 0  !important;
     
 }
 
