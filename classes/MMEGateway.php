@@ -217,8 +217,6 @@ function wc_mme_gateway_init() {
 		public function process_payment( $order_id ) {
 			$order = wc_get_order( $order_id );
 			global $woocommerce;
-			wc_add_notice($woocommerce->cart->applied_coupons, 'error' );
-			return false;
 			$items = $woocommerce->cart->get_cart();
 			$cartItems = [];
 			foreach($items as $item => $values) { 
