@@ -1,7 +1,10 @@
 # MoneyMe+ Payment Gateway
-This payment gateway is used in woocommerce e-commerce platform
+MoneyMe Payments for WooCommerce allows Australian based WooCommerce merchants to provide their customers the ability to pay in instalments with up to 60 months interest-free. 
 ## Requirements
-   * WooCommerce
+This plugin extends the Payment Gateway functionality provided by WooCommerce. Please confirm the following dependencies are met before commencing installation of the plugin.
+
+   * WordPress 5.4+
+   * WooCommerce 4.6+
    * Have a merchant **MME Username** and **MME Password**. For details and subscriptions, visit https://www.moneyme.com.au/
  
 ## Settings
@@ -15,3 +18,38 @@ Once plugin is installed and met the requirements, you can now manage the MoneyM
    * **Test MME Password** - Merchant registered MME+ test password, this will be used if Test Mode is on. To get one, please visit and contact https://www.moneyme.com.au/
    * **Live MME Username** - Merchant registered MME+ username, this will be used if Test Mode is off. To get one, please visit and contact https://www.moneyme.com.au/
    * **Live MME Password** - Merchant registered MME+ password, this will be used if Test Mode is off. To get one, please visit and contact https://www.moneyme.com.au/
+
+### Wordpress Installation Folder
+The following structure assumes the default naming of the "wp-content" folder. If this has been changed, please use the value of the `WP_CONTENT_FOLDERNAME` constant defined in wp-settings.php.
+
+```
+├── wp-content/
+│   ├── plugins/
+│   │   ├── woocommerce/
+│   │   ├── moneyme-gateway-for-woocommerce/
+│   │   │   ├── classes/
+│   │   │   │   │   ├── MMECore.php
+│   │   │   │   │   ├── MMECustomer.php
+│   │   │   │   │   ├── MMEGateway.php
+│   │   │   ├── includes/
+│   │   │   │   ├── functions.php
+│   │   │   ├── views/
+│   │   │   │   │   ├── assets/
+│   │   │   │   │   |  ├── css/
+│   │   │   │   │   |  |  ├── animate.css
+│   │   │   │   │   |  |  ├── bootstrap-mme.min.css
+│   │   │   │   │   |  |  ├── custom.css
+│   │   │   │   │   |  |  ├── global.css
+│   │   │   │   │   |  |  ├── styles.css
+│   │   │   │   │   |  ├── images/
+│   │   │   │   │   |  ├── js/
+│   │   │   │   │   |  |  ├── bootstrap-mme.min.js
+│   │   │   │   │   |  |  ├── jquery.min.js
+│   │   │   │   │   |  |  ├── mme.js
+│   │   │   │   │   |  |  ├── proper.js
+│   │   │   │   │   ├── mme-main.php
+│   │   │   │   │   ├── mme-account.php
+│   │   │   ├── index.php
+│   │   │   ├── README.md
+│   │   │   ├── readme.txt
+```

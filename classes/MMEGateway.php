@@ -183,7 +183,11 @@ function wc_mme_gateway_init() {
 				$price =  $values['data']->get_price();
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
+<<<<<<< HEAD
 				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount:  '.$price;
+=======
+				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
+>>>>>>> v1.0.0-readme
 				$pid[] = $values['data']->get_id();
                 $qty[] = $values['quantity'];
 			}
@@ -224,7 +228,7 @@ function wc_mme_gateway_init() {
 				$price =  $values['data']->get_price();
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
-				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: '.$price;
+				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
 				$pid[] = $values['data']->get_id();
                 $qty[] = $values['quantity'];
 				
