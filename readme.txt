@@ -3,7 +3,7 @@ Contributors: MoneyMe
 Tags: eCommerce, Payments, Finance 
 Requires at least: 5.4 
 Tested up to: 5.7 
-Stable tag: 1.0 
+Stable tag: 1.0.0 
 Requires PHP: 7.0 
 License: GNU Public License
 License URI: https://www.gnu.org/licenses/

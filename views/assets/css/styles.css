@@ -451,6 +451,16 @@
 #payment_method_mme_gateway ~ label > svg{
     display: inline;
 }
+#payment_method_mme_gateway ~ label > img{
+    height: 48px !important;
+    width: 120px !important;
+    position: relative !important;
+    top: 8px !important;
+    display: inline !important;
+    max-height: initial !important;
+    max-width: initial !important;
+    float: none !important;
+}
 .mme-err-status{
     color: red; 
     font-size: 15px; 

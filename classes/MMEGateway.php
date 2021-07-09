@@ -20,7 +20,8 @@ function wc_mme_gateway_init() {
 			$this->init_form_fields();
 			$this->init_settings();
 			// Define user set variables
-			$this->title        = 'Pay with MoneyMe+'; //$this->get_option( 'title' );
+			$img = plugins_url( '../views/assets/images' , __FILE__ );
+			$this->title        = 'Pay with <img src="'.$img.'/mme_logo-label.svg" alt="Moneyme" />'; //$this->get_option( 'title' );
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions', $this->description );
 
@@ -183,11 +184,7 @@ function wc_mme_gateway_init() {
 				$price =  $values['data']->get_price();
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
-<<<<<<< HEAD
-				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount:  '.$price;
-=======
 				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
->>>>>>> v1.0.0-readme
 				$pid[] = $values['data']->get_id();
                 $qty[] = $values['quantity'];
 			}
