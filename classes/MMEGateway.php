@@ -1,6 +1,6 @@
 <?php
 require_once('MMECustomer.php');
-function wc_mme_gateway_init() {
+function moneyme_gateway_init() {
 
 	class MMEGateway extends WC_Payment_Gateway {
 
@@ -20,7 +20,7 @@ function wc_mme_gateway_init() {
 			$this->init_form_fields();
 			$this->init_settings();
 			// Define user set variables
-			$this->title        = 'Pay with MoneyMe+'; //$this->get_option( 'title' );
+			$this->title        = 'Pay with Moneyme+'; //$this->get_option( 'title' );
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions', $this->description );
 
@@ -67,7 +67,7 @@ function wc_mme_gateway_init() {
 					'title'       => __( 'Payment Method Info', 'wc-gateway-mme' ),
 					'type'        => 'textarea',
 					'description' => __( 'Shown to customer at checkout.', 'wc-gateway-mme' ),
-					'default'     => __( '<p>Use your MoneyMe+ account for purchases up to $10,000 with 24 months interest-free.</p>', 'wc-gateway-mme' ),
+					'default'     => __( 'Use your MoneyMe+ account for purchases up to $10,000 with 24 months interest-free.', 'wc-gateway-mme' ),
 					'desc_tip'    => true,
 				),
 				'testmode' => array(
@@ -105,7 +105,7 @@ function wc_mme_gateway_init() {
 				),
 			) );
 			if(isset($_GET['cart_added'])){
-				echo '<input type="hidden" id="mme-cart-added-temp" value="'.$_GET['cart_added'].'" />';
+				echo wp_kses('<input type="hidden" id="mme-cart-added-temp" value="'.esc_attr($_GET['cart_added']).'" />', ['input' => ['type' => 'hidden', 'value' => esc_attr($_GET['cart_added']), 'id' => 'mme-cart-added-temp']]);
 			}
 		}
 		
@@ -183,11 +183,7 @@ function wc_mme_gateway_init() {
 				$price =  $values['data']->get_price();
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
-<<<<<<< HEAD
-				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount:  '.$price;
-=======
 				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
->>>>>>> v1.0.0-readme
 				$pid[] = $values['data']->get_id();
                 $qty[] = $values['quantity'];
 			}
@@ -233,9 +229,18 @@ function wc_mme_gateway_init() {
                 $qty[] = $values['quantity'];
 				
 			}
-			$signed_post = $_POST;
+			$fields = ['billing_first_name', 'billing_last_name', 'billing_company', 'billing_country', 'billing_address_1', 'billing_address_2', 'billing_city', 'billing_state', 'billing_postcode', 'billing_phone', 'billing_email', 'mme_checkout_url'];
+			foreach($fields as $key){
+				if(isset($_POST[$key])){
+					if($key == 'billing_email'){
+						$signed_post[$key] = sanitize_email($_POST[$key]);
+					}else{
+						$signed_post[$key] = sanitize_text_field($_POST[$key]);
+					}
+					
+				}
+			}
 			$remove = array('order_comments', 'woocommerce-process-checkout-nonce', '_wp_http_referer', 'payment_method');
-			$signed_post = array_diff_key($post, array_flip($remove));
 			$signed_data = base64_encode(json_encode($signed_post));
 			$checkout_url_params = [
 				'action' => 'mme_cart_items',
@@ -247,7 +252,7 @@ function wc_mme_gateway_init() {
 			$checkout_url = urldecode($checkout_url);
 			// Format Description: qty - title - id - price as requested by shaun
 			$items = implode(", ", $cartItems);
-			$customer = (object) ['AccessToken' => stripslashes($_POST['_mme_token']), 'ApplicationId' => stripslashes($_POST['_mme_application_id']), 'MerchantId' => stripslashes($_POST['_mme_merchant_id']), 'CheckoutDescription' => $items, 'CheckoutUrl' => $checkout_url];
+			$customer = (object) ['AccessToken' => sanitize_text_field($_POST['_mme_token']), 'ApplicationId' => sanitize_text_field($_POST['_mme_application_id']), 'MerchantId' => sanitize_text_field($_POST['_mme_merchant_id']), 'CheckoutDescription' => $items, 'CheckoutUrl' => $checkout_url];
 			$response = $this->MME->processPayment(['amount' => $order->total], $customer);
 			
 			if(!$response->IsMMEPlusTransactionCreated){
@@ -290,7 +295,6 @@ function wc_mme_gateway_init() {
 			$eligible = $customer->Eligibility;
 			$payment = $payment_request;
 			$img = plugins_url( '../views/assets/images' , __FILE__ );
-
 			include_once(plugin_dir_path( __FILE__ ).'../views/mme-account.php');
 		}
 

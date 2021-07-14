@@ -464,8 +464,10 @@ input {
     padding-bottom: 20px;
 }
 
-.m-442218.mme-gateway .mme-logo-wrap svg {
-    max-width: 180px;
+.m-442218.mme-gateway .mme-logo-wrap svg, .m-442218.mme-gateway .mme-logo-wrap img {
+    max-width: 180px !important;
+    position: relative;
+    left: 19px;
 }
 
 .m-442218.mme-gateway .button-wrap {
@@ -551,7 +553,7 @@ input {
     left: 19px;
 }
 
-.m-442218.mme-gateway .login-wrap .mme-logo-wrap svg {
+.m-442218.mme-gateway .login-wrap .mme-logo-wrap svg, .m-442218.mme-gateway .login-wrap .mme-logo-wrap img {
     position: relative;
     left: 12px;
     display:block;

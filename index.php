@@ -15,29 +15,12 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 }
 
 
-/**
- * Add the gateway to WC Available Gateways
- * 
- * @since 1.0.0
- * @param array $gateways all available WC gateways
- * @return array $gateways all WC gateways + offline gateway
- */
-function wc_mme_add_to_gateways( $gateways ) {
+function moneyme_add_to_gateways( $gateways ) {
 	$gateways[] = 'MMEGateway';
 	return $gateways;
 }
 
-
-add_filter( 'woocommerce_payment_gateways', 'wc_mme_add_to_gateways' );
-
-/**
- * Adds plugin page links
- * 
- * @since 1.0.0
- * @param array $links all plugin links
- * @return array $links all plugin links + our custom links (i.e., "Settings")
- */
-function wc_offline_gateway_plugin_links( $links ) {
+function moneyme_payment_gateway_plugin_links( $links ) {
 
 	$plugin_links = array(
 		'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=mme_gateway' ) . '">' . __( 'Configure', 'wc-gateway-offline' ) . '</a>'
@@ -45,5 +28,6 @@ function wc_offline_gateway_plugin_links( $links ) {
 
 	return array_merge( $plugin_links, $links );
 }
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'wc_offline_gateway_plugin_links' );
-add_action( 'plugins_loaded', 'wc_mme_gateway_init', 11 );
+add_filter( 'woocommerce_payment_gateways', 'moneyme_add_to_gateways' );
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'moneyme_payment_gateway_plugin_links' );
+add_action( 'plugins_loaded', 'moneyme_gateway_init', 11 );

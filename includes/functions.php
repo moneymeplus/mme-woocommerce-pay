@@ -2,8 +2,14 @@
 if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   global $woocommerce;
   function login_mme_customer_handler(){
-    $username = strip_tags($_POST['username']);
-    $password = strip_tags($_POST['password']);
+    $username = sanitize_text_field($_POST['username']);
+    $password = sanitize_text_field($_POST['password']);
+
+    if($username == "" || $password == ""){
+      header('Content-type: application/json');
+      echo json_encode(['error'=> "Please enter valid username and password"]);
+      die();
+    }
     $obj = new MMEGateway(); 
     if(!$obj->MME::$CUSTOMER){
       $response = $obj->MME->login(['username' => $username, 'password' => $password]);
@@ -29,27 +35,51 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
       }
       if(!$response->IsEligibleMMEPlusTransaction){
         $payment_request = $obj->MME->requestPayment([], $obj->MME::$CUSTOMER);
-        echo $obj->requestTemplate($payment_request);
+        $obj->requestTemplate($payment_request);
         die();
       }
       
     }
-    
     $payment_request = $obj->MME->requestPayment([], $obj->MME::$CUSTOMER);
     if($payment_request['status'] == "failed"){
       global $message;
-      echo $message = $payment_request['message'];
+      $message = $payment_request['message'];
+      echo esc_attr($message);
       include_once(plugin_dir_path( __FILE__ ).'../views/mme-main.php');
       die();
     }
-    echo $obj->requestTemplate($payment_request);
+    $obj->requestTemplate($payment_request);
     die();
   }
 
   function signup_mme_customer_handler(){
   header('Content-type: application/json');
-  $post = $_POST;
+  $fields = ['billing_address_1', 'billing_address_2', 'billing_city', 'billing_company', 'billing_country', 'billing_email', 'billing_first_name', 'billing_last_name', 'billing_phone', 'billing_postcode', 'billing_state', 'checkout_url', 'mme_billing_email','mme_billing_first_name', 'mme_billing_last_name', 'mme_billing_phone', 'mme_billing_title'];
+
+  foreach($fields as $k){
+      if($k != 'billing_email' || $k != 'mme_billing_email'){
+        $post[$k] = sanitize_email($_POST[$k]);
+      }else{
+        $post[$k] = sanitize_text_field($_POST[$k]);
+      }
+  }
+  if(!is_email($post['mme_billing_email'])){
+    echo json_encode(["status"=>"error", "message" => 'Please enter a valid email']);
+    die();
+  }
+
+  if(strlen($post['mme_billing_phone']) > 10 && !is_numeric($post['mme_billing_phone'])){
+    echo json_encode(["status"=>"error", "message" => 'Phone number should be numeric and not more than 10 digits']);
+    die();
+  }
+
+  if(strlen($post['mme_billing_last_name']) > 1000 || !isset($post['mme_billing_last_name'])){
+    echo json_encode(["status"=>"error", "message" => 'Last name is required and not more than 1000 digits']);
+    die();
+  }
+
   $obj = new MMEGateway();
+  
   $validate = $obj->MME->checkAccountExists($post);
   //error field/s input
 
@@ -65,7 +95,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   
   //account exits
   if($validate->AccountExists){
-    echo json_encode(["status"=>"exists", "message" => "account exists"]);
+    echo json_encode(["status"=>"exists", "message" => "Account exists"]);
     die();
   }
   
@@ -80,9 +110,13 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 
   function request_forgot_pin_handler(){
     header('Content-type: application/json');
-    $post = $_POST;
     $obj = new MMEGateway();
-    $request = $obj->MME->sendForgotPinEmail(['email' => $post['email']]);
+    $email = sanitize_text_field($_POST['email']);
+    if(!is_email($email)){
+      echo json_encode(["status"=>"error", "message" => "Please enter valid email."]);
+      die();
+    }
+    $request = $obj->MME->sendForgotPinEmail(['email' => $email]);
     if($request->IsSent){
       echo json_encode(["status"=>"ok", "customer_id" => $request->CustomerId]);
     }else{
@@ -93,9 +127,8 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 
   function verify_forgot_pin_handler(){
     header('Content-type: application/json');
-    $post = $_POST;
     $obj = new MMEGateway();
-    $request = $obj->MME->verifyForgotPasswordCode(['code' => $post['code'], 'customer_id' => $post['customer_id']]);
+    $request = $obj->MME->verifyForgotPasswordCode(['code' => sanitize_text_field($_POST['code']), 'customer_id' => sanitize_text_field($_POST['customer_id'])]);
     if($request->AccessToken){
       echo json_encode(["status"=>"ok", "access_token" => $request->AccessToken]);
     }else{
@@ -106,7 +139,23 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 
   function change_passcode_handler(){
     header('Content-type: application/json');
-    $post = $_POST;
+    $post['access_token'] = sanitize_text_field($_POST['access_token']);
+    $post['customer_id'] = sanitize_text_field($_POST['customer_id']);
+    $post['new_pin'] = sanitize_text_field($_POST['new_pin']);
+    $post['confirm_pin'] = sanitize_text_field($_POST['confirm_pin']);
+    
+    foreach($post as $key => $value){
+      if(!isset($post[$key])){
+        echo json_encode(["status"=>"error", "message" => "${key} is required."]);
+        die();
+      }
+    }
+
+    if($post['new_pin'] != $post['confirm_pin']){
+        echo json_encode(["status"=>"error", "message" => "New pin and confirm pin does not match"]);
+        die();
+    }
+
     $obj = new MMEGateway();
     $request = $obj->MME->changePasswordCode($post, $post['access_token']);
     if($request->IsChangePinSuccess){
@@ -117,22 +166,13 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     die();
   }
 
-  function mme_checkout_enqueue_styles() {
-    $plugin_url = plugin_dir_url( __DIR__ );
-
-    wp_enqueue_style( 'bootstrap', $plugin_url . 'views/assets/css/bootstrap-mme.min.css' );
-    wp_enqueue_style( 'animate', $plugin_url . 'views/assets/css/animate.css');
-    wp_enqueue_style( 'global', $plugin_url . 'views/assets/css/global.css');
-    wp_enqueue_style( 'custom', $plugin_url . 'views/assets/css/custom.css' );
-    
-  }
-
   function mme_cart_items_handler(){
     global $woocommerce;
-    $cart_added = $_GET['cart_added'];
+    $cart_added = sanitize_text_field($_GET['cart_added']);
+    $ut = sanitize_text_field($_GET['ut']);
     $site_url = site_url();
 
-    $isExpired = $_GET['ut'] < strtotime("now") ? true : false;
+    $isExpired = $ut < strtotime("now") ? true : false;
     if($isExpired){
       header("Location: {$site_url}"); 
       die();
@@ -143,8 +183,8 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     }
  
     if(isset($_GET['pid'])){
-      $pid = explode(',',base64_decode($_GET['pid']));
-      $qty = explode(',',base64_decode($_GET['q']));
+      $pid = explode(',',base64_decode(sanitize_text_field($_GET['pid'])));
+      $qty = explode(',',base64_decode(sanitize_text_field($_GET['q'])));
  
       $woocommerce->cart->empty_cart();
       foreach($pid as $key => $value) { 
@@ -156,19 +196,31 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 
     $url = wc_get_checkout_url();
     if(isset($_GET['mme_redirect_data'])){
-        $get = $_GET;
-        $url .= '?mme_redirect_data='.$_GET['mme_redirect_data'].'&cart_added='.$get['cart_added'];
+        $url .= '?mme_redirect_data='.sanitize_text_field($_GET['mme_redirect_data']).'&cart_added='.sanitize_text_field($_GET['cart_added']);
     }
     header("Location: {$url}"); 
     die();
+  }
+  function mme_checkout_enqueue_styles() {
+    $plugin_url = plugin_dir_url( __DIR__ );
+    wp_enqueue_style( 'g-font-lexa', 'https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap' );
+    wp_enqueue_style( 'g-font-lato', 'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap' );
+    wp_enqueue_style( 'font-awesome', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
+    wp_enqueue_style( 'mod-bs-css', $plugin_url . 'views/assets/css/modified-mme-bs.min.css' );
+    
+    wp_enqueue_style( 'animate', $plugin_url . 'views/assets/css/animate.css');
+    wp_enqueue_style( 'global', $plugin_url . 'views/assets/css/global.css');
+    wp_enqueue_style( 'custom', $plugin_url . 'views/assets/css/custom.css' );
+    wp_enqueue_style( 'main-style', $plugin_url . 'views/assets/css/styles.css' );
+    
   }
 
   function mme_checkout_enqueue_script() {
     $plugin_url = plugin_dir_url( __DIR__ );
 
-    wp_enqueue_script( 'jquery', $plugin_url . 'views/assets/js/jquery-min.js' );
-    wp_enqueue_script( 'jquery', $plugin_url . 'views/assets/js/proper.js' );
-    wp_enqueue_script( 'bootstrap', $plugin_url . 'views/assets/js/bootstrap-mme.min.js' );
+    wp_enqueue_script( 'proper', $plugin_url . 'views/assets/js/proper.js' );
+    wp_enqueue_script( 'mod-bs-js', $plugin_url . 'views/assets/js/modified-mme-bs.min.js' );
+    wp_enqueue_script( 'script-name', plugin_dir_url( __FILE__ ). '../views/assets/js/mme.js', '', '', true);
   }
   add_action( 'woocommerce_payment_complete', 'my_change_status_function' );
 
@@ -176,6 +228,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
       $order = wc_get_order( $order_id );
       $order->update_status( 'completed' );
   }
+  
   add_action('wp_ajax_login_mme_customer', 'login_mme_customer_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_login_mme_customer', 'login_mme_customer_handler');
 
