@@ -15,11 +15,19 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 }
 
 
-function wc_mme_add_to_gateways( $gateways ) {
+function moneyme_add_to_gateways( $gateways ) {
 	$gateways[] = 'MMEGateway';
 	return $gateways;
 }
 
+function moneyme_payment_gateway_plugin_links( $links ) {
 
-add_filter( 'woocommerce_payment_gateways', 'wc_mme_add_to_gateways' );
-add_action( 'plugins_loaded', 'wc_mme_gateway_init', 11 );
+	$plugin_links = array(
+		'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=mme_gateway' ) . '">' . __( 'Configure', 'wc-gateway-offline' ) . '</a>'
+	);
+
+	return array_merge( $plugin_links, $links );
+}
+add_filter( 'woocommerce_payment_gateways', 'moneyme_add_to_gateways' );
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'moneyme_payment_gateway_plugin_links' );
+add_action( 'plugins_loaded', 'moneyme_gateway_init', 11 );

@@ -1,6 +1,6 @@
 <?php
 require_once('MMECustomer.php');
-function wc_mme_gateway_init() {
+function moneyme_gateway_init() {
 
 	class MMEGateway extends WC_Payment_Gateway {
 
@@ -20,7 +20,7 @@ function wc_mme_gateway_init() {
 			$this->init_form_fields();
 			$this->init_settings();
 			// Define user set variables
-			$this->title        = 'Pay with Moneyme'; //$this->get_option( 'title' );
+			$this->title        = 'Pay with Moneyme+'; //$this->get_option( 'title' );
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions', $this->description );
 
@@ -105,7 +105,7 @@ function wc_mme_gateway_init() {
 				),
 			) );
 			if(isset($_GET['cart_added'])){
-				echo wp_kses('<input type="hidden" id="mme-cart-added-temp" value="'.$_GET['cart_added'].'" />', ['input' => ['type' => 'hidden', 'value' => esc_attr($_GET['cart_added']), 'id' => 'mme-cart-added-temp']]);
+				echo wp_kses('<input type="hidden" id="mme-cart-added-temp" value="'.esc_attr($_GET['cart_added']).'" />', ['input' => ['type' => 'hidden', 'value' => esc_attr($_GET['cart_added']), 'id' => 'mme-cart-added-temp']]);
 			}
 		}
 		

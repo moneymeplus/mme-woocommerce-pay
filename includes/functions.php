@@ -68,17 +68,18 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     die();
   }
 
-  if(strlen($post['mme_billing_phone']) > 10 || !is_numeric($post['mme_billing_phone'])){
+  if(strlen($post['mme_billing_phone']) > 10 && !is_numeric($post['mme_billing_phone'])){
     echo json_encode(["status"=>"error", "message" => 'Phone number should be numeric and not more than 10 digits']);
     die();
   }
 
-  if(strlen($post['mme_billing_last_name']) > 1000 || !isset($post['mme_billing_phone'])){
+  if(strlen($post['mme_billing_last_name']) > 1000 || !isset($post['mme_billing_last_name'])){
     echo json_encode(["status"=>"error", "message" => 'Last name is required and not more than 1000 digits']);
     die();
   }
 
   $obj = new MMEGateway();
+  
   $validate = $obj->MME->checkAccountExists($post);
   //error field/s input
 
@@ -205,7 +206,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     wp_enqueue_style( 'g-font-lexa', 'https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap' );
     wp_enqueue_style( 'g-font-lato', 'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap' );
     wp_enqueue_style( 'font-awesome', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
-    wp_enqueue_style( 'bootstrap', $plugin_url . 'views/assets/css/bootstrap-mme.min.css' );
+    wp_enqueue_style( 'mod-bs-css', $plugin_url . 'views/assets/css/modified-mme-bs.min.css' );
     
     wp_enqueue_style( 'animate', $plugin_url . 'views/assets/css/animate.css');
     wp_enqueue_style( 'global', $plugin_url . 'views/assets/css/global.css');
@@ -217,9 +218,8 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   function mme_checkout_enqueue_script() {
     $plugin_url = plugin_dir_url( __DIR__ );
 
-    wp_enqueue_script( 'jquery', $plugin_url . 'views/assets/js/jquery-min.js' );
-    wp_enqueue_script( 'jquery', $plugin_url . 'views/assets/js/proper.js' );
-    wp_enqueue_script( 'bootstrap', $plugin_url . 'views/assets/js/bootstrap-mme.min.js' );
+    wp_enqueue_script( 'proper', $plugin_url . 'views/assets/js/proper.js' );
+    wp_enqueue_script( 'mod-bs-js', $plugin_url . 'views/assets/js/modified-mme-bs.min.js' );
     wp_enqueue_script( 'script-name', plugin_dir_url( __FILE__ ). '../views/assets/js/mme.js', '', '', true);
   }
   add_action( 'woocommerce_payment_complete', 'my_change_status_function' );
@@ -237,7 +237,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 
   add_action('wp_ajax_request_forgot_pin', 'request_forgot_pin_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_request_forgot_pin', 'request_forgot_pin_handler');
-\
+
   add_action('wp_ajax_verify_forgot_pin', 'verify_forgot_pin_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_verify_forgot_pin', 'verify_forgot_pin_handler');
 

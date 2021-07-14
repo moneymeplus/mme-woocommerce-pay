@@ -37,14 +37,13 @@ The following structure assumes the default naming of the "wp-content" folder. I
 │   │   │   │   │   ├── assets/
 │   │   │   │   │   |  ├── css/
 │   │   │   │   │   |  |  ├── animate.css
-│   │   │   │   │   |  |  ├── bootstrap-mme.min.css
+│   │   │   │   │   |  |  ├── modified-mme-bs.min.css
 │   │   │   │   │   |  |  ├── custom.css
 │   │   │   │   │   |  |  ├── global.css
 │   │   │   │   │   |  |  ├── styles.css
 │   │   │   │   │   |  ├── images/
 │   │   │   │   │   |  ├── js/
-│   │   │   │   │   |  |  ├── bootstrap-mme.min.js
-│   │   │   │   │   |  |  ├── jquery.min.js
+│   │   │   │   │   |  |  ├── modified-mme-bs.min.js
 │   │   │   │   │   |  |  ├── mme.js
 │   │   │   │   │   |  |  ├── proper.js
 │   │   │   │   │   ├── mme-main.php
