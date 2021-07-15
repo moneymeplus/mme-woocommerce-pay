@@ -206,7 +206,6 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     wp_enqueue_style( 'g-font-lexa', 'https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap' );
     wp_enqueue_style( 'g-font-lato', 'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap' );
     wp_enqueue_style( 'font-awesome', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
-    wp_enqueue_style( 'mod-bs-css', $plugin_url . 'views/assets/css/modified-mme-bs.min.css' );
     
     wp_enqueue_style( 'animate', $plugin_url . 'views/assets/css/animate.css');
     wp_enqueue_style( 'global', $plugin_url . 'views/assets/css/global.css');
@@ -219,7 +218,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     $plugin_url = plugin_dir_url( __DIR__ );
 
     wp_enqueue_script( 'proper', $plugin_url . 'views/assets/js/proper.js' );
-    wp_enqueue_script( 'mod-bs-js', $plugin_url . 'views/assets/js/modified-mme-bs.min.js' );
+    wp_enqueue_script( 'mod-bs-js', $plugin_url . 'views/assets/js/bootstrap.min.js', ['jquery'], '', true );
     wp_enqueue_script( 'script-name', plugin_dir_url( __FILE__ ). '../views/assets/js/mme.js', '', '', true);
   }
   add_action( 'woocommerce_payment_complete', 'my_change_status_function' );
