@@ -130,12 +130,12 @@ function moneyme_gateway_init() {
 			global $woocommerce;
 			$customer = get_transient('customer');
 			if($woocommerce->cart->total < 1000){
-				wc_add_notice('Total checkout amount is not valid for MoneyMe payment. MoneyMe accept checkout worth greater or equal to $1000', 'error' );
+				wc_add_notice('Total checkout amount is not valid for MoneyMe+ payment. MoneyMe+ accept checkout worth greater or equal to $1000', 'error' );
 				return false;
 			}
 
 			if(!isset($_POST['_mme_token'])){
-				wc_add_notice(  'Please continue by logging in your MoneyMe account on the modal.', 'error' );
+				wc_add_notice(  'Please continue by logging in your MoneyMe+ account on the modal.', 'error' );
 				return false;
 			}
 			return true;
@@ -248,6 +248,10 @@ function moneyme_gateway_init() {
 				'q' => base64_encode(implode(",",$qty)),
 				'mme_redirect_data' => $signed_data
 			];
+			return array(
+				'result' 	=> 'success',
+				'redirect'	=> $this->get_return_url( $order )
+			);
 			$checkout_url = site_url() . '/wp-admin/admin-ajax.php?'.http_build_query($checkout_url_params);
 			$checkout_url = urldecode($checkout_url);
 			// Format Description: qty - title - id - price as requested by shaun

@@ -1,14 +1,15 @@
-=== MoneyMe Payments for WooCommerce === 
-Contributors: MoneyMe 
-Tags: eCommerce, Payments, Finance 
-Requires at least: 5.4 
-Tested up to: 5.7 
-Stable tag: 1.0.0 
-Requires PHP: 7.0 
+=== MoneyMe Payments for WooCommerce ===
+Contributors: MoneyMe
+Tags: eCommerce, Payments, Finance
 License: GNU Public License
 License URI: https://www.gnu.org/licenses/
-Offer your customers the ability to pay in instalments with up to 60 months interest-free. 
-== Description == 
+
+Offer your customers the ability to pay in instalments with up to 60 months interest-free.
+
+== Description ==
+Offer your customers the ability to pay in instalments with up to 60 months interest-free.
+
+== Installation ==
 MoneyMe Payments for WooCommerce allows Australian based WooCommerce merchants to provide their customers the ability to pay in instalments with up to 60 months interest-free. 
 This version supports the MoneyMe+ product. MoneyMe+ allows you to boost your business by: 
 1. *Approval in minutes* – fast approval decisions allowing your customer to complete purchase within the same session. 
@@ -23,34 +24,41 @@ Your customers will love MoneyMe+ too:
 1. Contact hello@moneyme.com.au to obtain your merchant portal test and live credentials. 
 2. Login to WooCommerce admin portal 
 3. In the sidebar menu, navigate to **Plugins** > **Add New** 
-4. In the search box at the top-right of the screen, search for "moneyme" 
-5. Click **"Install Now"** button 
-6. Click **"Activate Now"** button 
+4. In the search box at the top-right of the screen, search for \"moneyme\" 
+5. Click **\"Install Now\"** button 
+6. Click **\"Activate Now\"** button 
 7. Configure MoneyMe+ settings 
-8. In the sidebar menu, navigate to **WooCommerce** > **Settings** > **Payments** > MoneyMe and click **"Manage"** 
+8. In the sidebar menu, navigate to **WooCommerce** > **Settings** > **Payments** > MoneyMe and click **\"Manage\"** 
 9. Configure the MoneyMe+ settings as follows: 
 **Enable/Disable**: *Enable MoneyMe+ Payment* 
 **Payment Method Info**: * Text that will be shown next to the MoneyMe+ Button. You can use basic inline HTML.  
 > Example:  
-`<p>`Use your MoneyMe+ account for purchases up to $10,000 with 24 months interest-free`</p>`* 
+`
+`Use your MoneyMe+ account for purchases up to $10,000 with 24 months interest-free`
+
+`* 
 **Test Mode**: *Check to enable. Test mode enables you to process transactions through the MoneyMe sandbox (read more here).* 
 **Test MoneyMe+ Username**: *Enter your test MoneyMe+ Username credentials here to use when testing sandbox.* 
 **Test MoneyMe+ Password**: *Enter your test MoneyMe+ Password credentials here to use when testing sandbox* 
 **Live MoneyMe+ Username**: *Enter your Live MoneyMe+ Username credentials here take live payments from your customers.* 
 **Live MoneyMe+ Password**: *Enter your Live MoneyMe+ Password credentials here take live payments from your customers.* 
-**Confirmation Instructions**: *This text will be displayed on the order confirmation page after the MoneyMe+ application has been approved and the checkout purchase has completed successfully.* 
-== Frequently Asked Questions == 
-= How do I create a Merchant Account? = 
+**Confirmation Instructions**: *This text will be displayed on the order confirmation page after the MoneyMe+ application has been approved and the checkout purchase has completed successfully.*
+
+== Frequently Asked Questions ==
+How do I create a Merchant Account?
 Contact hello@moneyme.com.au to learn about how to create your MoneyMe+ merchant account and enable WooCommerce access. 
-= How do I configure the interest free terms period? = 
-Contact hello@moneyme.com.au to learn how to design your own custom interest-free period terms. 
-== Screenshots == 
-1. Example of the configuration's settings configuration-1.png  
-2. Sample store checkout payment method with MoneyMe+ payment-method-1.png 
-3. Sample of order received confirmation confirmation-1.png 
-== Changelog == 
-= 0.5 = 
-* First release of the MoneyMe Payments portal allowing for payments at checkout.  
-== Upgrade Notice == 
-= 0.5 = 
-First version no upgrades required. 
+How do I configure the interest free terms period?
+Contact hello@moneyme.com.au to learn how to design your own custom interest-free period terms.
+
+== Screenshots ==
+1. Example of the configuration\'s settings.
+2. Sample store checkout payment method with MoneyMe+
+3. Sample of order received confirmation.
+
+== Changelog ==
+1.0.0
+* First release of the MoneyMe Payments portal allowing for payments at checkout. 
+
+== Upgrade Notice ==
+1.0.0
+* First version no upgrades required.

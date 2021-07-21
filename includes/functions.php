@@ -57,7 +57,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   $fields = ['billing_address_1', 'billing_address_2', 'billing_city', 'billing_company', 'billing_country', 'billing_email', 'billing_first_name', 'billing_last_name', 'billing_phone', 'billing_postcode', 'billing_state', 'checkout_url', 'mme_billing_email','mme_billing_first_name', 'mme_billing_last_name', 'mme_billing_phone', 'mme_billing_title'];
 
   foreach($fields as $k){
-      if($k != 'billing_email' || $k != 'mme_billing_email'){
+      if($k == 'billing_email' || $k == 'mme_billing_email'){
         $post[$k] = sanitize_email($_POST[$k]);
       }else{
         $post[$k] = sanitize_text_field($_POST[$k]);
@@ -79,7 +79,6 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   }
 
   $obj = new MMEGateway();
-  
   $validate = $obj->MME->checkAccountExists($post);
   //error field/s input
 

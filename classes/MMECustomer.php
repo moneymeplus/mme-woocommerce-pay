@@ -69,6 +69,7 @@ class MMECustomer extends MMECore
     public function checkAccountExists($post){
         $header[] = "Content-Type: application/json";
         $content = json_encode(['LastName' => $post['mme_billing_last_name'], 'MobileNumber' => $post['mme_billing_phone'], 'EmailAddress' => $post['mme_billing_email']]);
+        
         return self::call(self::$SERVICE_URL.'/api/MmePlusEcommerceAccount/CheckAccountExists', $header, 'post', $content, true);
     }
 
