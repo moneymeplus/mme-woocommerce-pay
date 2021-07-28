@@ -248,10 +248,7 @@ function moneyme_gateway_init() {
 				'q' => base64_encode(implode(",",$qty)),
 				'mme_redirect_data' => $signed_data
 			];
-			return array(
-				'result' 	=> 'success',
-				'redirect'	=> $this->get_return_url( $order )
-			);
+
 			$checkout_url = site_url() . '/wp-admin/admin-ajax.php?'.http_build_query($checkout_url_params);
 			$checkout_url = urldecode($checkout_url);
 			// Format Description: qty - title - id - price as requested by shaun
