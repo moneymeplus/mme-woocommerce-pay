@@ -8,7 +8,7 @@
         <p><?php echo esc_html($description);?></p>
     </div>
     
-    <div id="mme-select-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="Select">
+    <div id="mme-select-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="select">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -66,7 +66,7 @@
     </div>  
     
     <!-- User signup -->
-    <div id="mme-signup-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" data-backdrop="false" data-modal-name="Signup">
+    <div id="mme-signup-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" data-backdrop="false" data-modal-name="signup">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content modal-content-inner">
                 <div class="modal-header">
@@ -265,7 +265,7 @@
     </div>
 
     <!-- User login -->
-    <div id="mme-login-container" class="modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="Login">
+    <div id="mme-login-container" class="modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="login">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -342,7 +342,7 @@
     </div>
 
     <!--- forgot password --->
-    <div id="mme-forgot-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="Forgot Passcode">
+    <div id="mme-forgot-container" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="forgot passcode">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -570,7 +570,7 @@
             </div>
         </div>
     </div>  
-    <div id="mme-account-modal" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="Account Logged In"></div> 
+    <div id="mme-account-modal" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true"  data-backdrop="false" data-modal-name="account logged in"></div> 
 
     <!-- Checkout payment successful -->
     <div id="app-payment-success" class="modal" id="" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" data-backdrop="false">
