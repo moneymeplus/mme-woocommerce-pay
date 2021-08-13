@@ -7,6 +7,7 @@
             </button>
         </div>
         <div class="modal-body">
+            <input type="hidden" id="mme-customer-id" value="<?php echo $customer->CustomerId;?>" />
             <div class="checkout-header user-account-header">
                 <div class="mme-logo-wrap">
                     <img src="<?php echo esc_url($img.'/mme_logo.svg');?>" />
