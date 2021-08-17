@@ -121,6 +121,14 @@
     });
     
     /* Login Method */
+    jQuery("#mme-username").on("focusout", () => {
+        let username = jQuery('#mme-username').val();
+        if(!validateEmail(username)){
+            jQuery("#status").html("Please enter a valid email address.");
+        }else{
+            jQuery("#status").html("");
+        }
+    });
     jQuery(".mme-input").on("keyup", (e)=> {
     
         //dedicated to login
@@ -145,6 +153,7 @@
                     }
                     
                 })
+                jQuery("#status").html("");
                 if(err){
                     return false;
                 }
@@ -168,7 +177,6 @@
                         jQuery(".mme-login-loading").hide();
                     },
                     success : function( data ){
-                        jQuery("#status").html("");
                         mmeAnalytics.userLogInRequested({brand: mmeBrand, userType: mmeUserType, userName: username, integrationProvider: mmeProvider, platform: mmePlatform});
                         if(data.error){
                             if(data.error_id == 6){
