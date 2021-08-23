@@ -1,6 +1,8 @@
 === MoneyMe Payments for WooCommerce ===
 Contributors: MoneyMe
 Tags: eCommerce, Payments, Finance
+Tested up to: 5.8
+Stable tag: 1.0.1
 License: GNU Public License
 License URI: https://www.gnu.org/licenses/
 
@@ -36,12 +38,9 @@ Your customers will love MoneyMe+ too:
 `
 `Use your MoneyMe+ account for purchases up to $10,000 with 24 months interest-free`
 
-`* 
-**Test Mode**: *Check to enable. Test mode enables you to process transactions through the MoneyMe sandbox (read more here).* 
-**Test MoneyMe+ Username**: *Enter your test MoneyMe+ Username credentials here to use when testing sandbox.* 
-**Test MoneyMe+ Password**: *Enter your test MoneyMe+ Password credentials here to use when testing sandbox* 
-**Live MoneyMe+ Username**: *Enter your Live MoneyMe+ Username credentials here take live payments from your customers.* 
-**Live MoneyMe+ Password**: *Enter your Live MoneyMe+ Password credentials here take live payments from your customers.* 
+`*  
+**MoneyMe+ Username**: *Enter your Live MoneyMe+ Username credentials here take live payments from your customers.* 
+**MoneyMe+ Password**: *Enter your Live MoneyMe+ Password credentials here take live payments from your customers.* 
 **Confirmation Instructions**: *This text will be displayed on the order confirmation page after the MoneyMe+ application has been approved and the checkout purchase has completed successfully.*
 
 == Frequently Asked Questions ==
@@ -56,9 +55,12 @@ Contact hello@moneyme.com.au to learn how to design your own custom interest-fre
 3. Sample of order received confirmation.
 
 == Changelog ==
-1.0.0
-* First release of the MoneyMe Payments portal allowing for payments at checkout. 
+1.0.1
 
-== Upgrade Notice ==
+* Implemented analytics tracking
+* Fixed bugs on validation
+* Remove sandbox option
+
 1.0.0
-* First version no upgrades required.
+
+* First release of the MoneyMe Payments portal allowing for payments at checkout. 

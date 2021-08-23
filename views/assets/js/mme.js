@@ -123,7 +123,7 @@
     /* Login Method */
     jQuery("#mme-username").on("focusout", () => {
         let username = jQuery('#mme-username').val();
-        if(!validateEmail(username)){
+        if(!validateEmail(username) && username != ""){
             jQuery("#status").html("Please enter a valid email address.");
         }else{
             jQuery("#status").html("");
@@ -524,9 +524,9 @@
     })
     /* Open Modal */
     jQuery('.modal ').on('shown.bs.modal', function (e) {
-        var modalName = $(this).data('modalName');
+        var modalName = ($(this).data('modalName').replaceAll(" ", "-")).toLowerCase();
         if(modalName){
-            mmeAnalytics.modalLayerDisplayed({platform: 'ecommerce', locationOfAction: 'WooCommerce Checkout', modalName: modalName});
+            mmeAnalytics.modalLayerDisplayed({platform: 'ecommerce', locationOfAction: 'woocommerce-checkout', modalName: modalName});
         }
         if(jQuery("#status").html() != "Oops, something went wrong. Please login again") {
             jQuery(".mme-err-status").html("");
