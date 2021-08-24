@@ -67,7 +67,7 @@ function moneyme_gateway_init() {
 					'title'       => __( 'Payment Method Info', 'wc-gateway-mme' ),
 					'type'        => 'textarea',
 					'description' => __( 'Shown to customer at checkout.', 'wc-gateway-mme' ),
-					'default'     => __( 'Use your MoneyMe+ account for purchases up to $10,000 with 24 months interest-free.', 'wc-gateway-mme' ),
+					'default'     => __( 'Use your MoneyMe+ account for purchases up to $50,000 with 24 interest-free.', 'wc-gateway-mme' ),
 					'desc_tip'    => true,
 				),
 				'testmode' => array(
