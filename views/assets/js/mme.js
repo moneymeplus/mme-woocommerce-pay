@@ -524,9 +524,9 @@
     })
     /* Open Modal */
     jQuery('.modal ').on('shown.bs.modal', function (e) {
-        var modalName = ($(this).data('modalName').replaceAll(" ", "-")).toLowerCase();
+        var modalName = $(this).data('modalName');
         if(modalName){
-            mmeAnalytics.modalLayerDisplayed({platform: 'ecommerce', locationOfAction: 'woocommerce-checkout', modalName: modalName});
+            mmeAnalytics.modalLayerDisplayed({platform: 'ecommerce', locationOfAction: 'woocommerce-checkout', modalName: (modalName.replaceAll(" ", "-")).toLowerCase()});
         }
         if(jQuery("#status").html() != "Oops, something went wrong. Please login again") {
             jQuery(".mme-err-status").html("");

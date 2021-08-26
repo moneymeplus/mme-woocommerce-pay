@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: MoneyMe Payments for WooCommerce
+Plugin Name: <QA> MoneyMe Payments for WooCommerce
 Description: Let your customers pay in installments with up to 60 months interest-free.
 Version: 1.0.1
 Tested up to: 5.8
