@@ -19,5 +19,6 @@ class CustomPlugin extends ItlySdk.Plugin {
 }
 
 mmeAnalytics.load({
-    plugins: [new CustomPlugin()]
+    plugins: [new CustomPlugin()],
+    environment: "production"
 });

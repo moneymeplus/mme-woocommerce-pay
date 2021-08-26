@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 class MMECore
 {
-    public static $SERVICE_URL = "https://qa-horizonapi.moneyme.com.au/Mobile";
-    //public static $SERVICE_URL = "https://horizonapi.moneyme.com.au/Mobile";
+    //public static $SERVICE_URL = "https://qa-horizonapi.moneyme.com.au/Mobile";
+    public static $SERVICE_URL = "https://horizonapi.moneyme.com.au/Mobile";
     
     public static $STATELESS = true;
     protected static $USERNAME = "";
