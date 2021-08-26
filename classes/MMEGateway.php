@@ -23,10 +23,8 @@ function moneyme_gateway_init() {
 			$this->title        = 'Pay with Moneyme+'; //$this->get_option( 'title' );
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions', $this->description );
-
-			$this->testmode = 'yes' === $this->get_option( 'testmode' );
-			$this->password = $this->testmode ? $this->get_option( 'test_password' ) : $this->get_option( 'password' );
-			$this->username = $this->testmode ? $this->get_option( 'test_username' ) : $this->get_option( 'username' );
+			$this->password = $this->get_option( 'password' );
+			$this->username = $this->get_option( 'username' );
 			$this->supports = array(
 				'products',
 				//'refunds'
@@ -43,9 +41,6 @@ function moneyme_gateway_init() {
 				'mme_password' => $this->password
 			];
 			$this->MME = new MMECustomer($config); 	
-			if(!$this->testmode){
-				$this->MME::$SERVICE_URL = "https://horizonapi.moneyme.com.au/Mobile";
-			}
 		}
 	
 	
@@ -70,30 +65,12 @@ function moneyme_gateway_init() {
 					'default'     => __( 'Use your MoneyMe+ account for purchases up to $50,000 with 24 interest-free.', 'wc-gateway-mme' ),
 					'desc_tip'    => true,
 				),
-				'testmode' => array(
-					'title'       => 'Test mode',
-					'label'       => 'Enable Test Mode',
-					'type'        => 'checkbox',
-					'description' => 'Enable with test credentials to process test transactions.',
-					'default'     => true,
-					'desc_tip'    => true,
-				),
-				'test_username' => array(
-					'title'       => 'Test MoneyMe Username',
-					'type'        => 'text',
-					'default'	  => '',
-				),
-				'test_password' => array(
-					'title'       => 'Test MoneyMe Password',
-					'type'        => 'password',
-					'default'	  => '',
-				),
 				'username' => array(
-					'title'       => 'Live MoneyMe Username',
+					'title'       => 'MoneyMe Username',
 					'type'        => 'text',
 				),
 				'password' => array(
-					'title'       => 'Live MoneyMe Password',
+					'title'       => 'MoneyMe Password',
 					'type'        => 'password',
 				),
 				'instructions' => array(
