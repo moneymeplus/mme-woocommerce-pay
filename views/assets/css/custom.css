@@ -662,6 +662,8 @@
 .m-442218.mme-gateway .modal-content {
     background: none;
     border: none;
+    box-shadow: none !important;
+    width: 100% !important;
 }
 
 .m-442218.mme-gateway .modal-body {

@@ -12,12 +12,14 @@
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
+    jQuery(document).off("keydown");
     jQuery(document).on("keydown", (e)=>{
         if(e.keyCode == "13"){
             if(jQuery('.modal').hasClass("show")) e.preventDefault();
         }
     });
     /* Signup Customer Account */
+    jQuery("#mme-btn-submit").off("click");
     jQuery("#mme-btn-submit").click(function(){
         let fields = {};
         let err = 0;
@@ -109,6 +111,7 @@
         });
         return false;
     });
+    jQuery("#mme-btn-signup-select").off("click");
     jQuery("#mme-btn-signup-select").on("click", ()=>{
         jQuery(".mme-existing-account").hide();
         jQuery(".mme-have-account").show();
@@ -116,11 +119,13 @@
     });
     
     /* Select Pin*/
+    jQuery(".mme-input, .mme-input-temp, .mme-input-new, .mme-input-conf").off("focus");
     jQuery(".mme-input, .mme-input-temp, .mme-input-new, .mme-input-conf").on("focus", (e)=>{
         jQuery(e.currentTarget).select();
     });
     
     /* Login Method */
+    jQuery("#mme-username").off("focusout");
     jQuery("#mme-username").on("focusout", () => {
         let username = jQuery('#mme-username').val();
         if(!validateEmail(username) && username != ""){
@@ -129,6 +134,7 @@
             jQuery("#status").html("");
         }
     });
+    jQuery(".mme-input").off("keyup");
     jQuery(".mme-input").on("keyup", (e)=> {
     
         //dedicated to login
@@ -298,6 +304,7 @@
             }
         }, 1000);
     }
+    jQuery("#btn-mme-recover").off("click");
     jQuery("#btn-mme-recover").on("click", ()=>{
         var username = jQuery("#mme-forgot-username").val();
         if(username == ""){
@@ -341,6 +348,7 @@
             }
         });
     });
+    jQuery("#mme-resend-email").off("click");
     jQuery("#mme-resend-email").on("click", ()=>{
         var username = jQuery("#mme-forgot-username").val();
         jQuery.ajax({ // you can also use $.post here
@@ -369,6 +377,7 @@
             }
         });
     });
+    jQuery(".mme-input-temp").off("keyup")
     jQuery(".mme-input-temp").on("keyup", (e)=> {
         if(e.keyCode == 8 || e.keyCode == 46 || e.keyCode == 9) return false;
             let i = jQuery(e.currentTarget).data("pin") + 1;
@@ -409,6 +418,7 @@
     
             }
     });
+    jQuery(".mme-input-new").off("keyup");
     jQuery(".mme-input-new").on("keyup", (e)=> {
         if(e.keyCode == 8 || e.keyCode == 46 || e.keyCode == 9) return false;
             let i = jQuery(e.currentTarget).data("pin") + 1;
@@ -427,12 +437,14 @@
                 jQuery(".mme-input-conf:eq(0)").focus();
             }
     });
+    jQuery("#mme-btn-back").off("click");
     jQuery("#mme-btn-back").on("click", () => {
         jQuery(".mme-err-status").html("");
         jQuery("#confirm-pass-box").hide();
         jQuery("#new-pass-box").show();
         jQuery(".mme-input-new:eq(0)").focus();
     });
+    jQuery(".mme-input-conf").off("keyup");
     jQuery(".mme-input-conf").on("keyup", (e)=> {
         if(e.keyCode == 8 || e.keyCode == 46 || e.keyCode == 9) return false;
             let i = jQuery(e.currentTarget).data("pin") + 1;
@@ -522,6 +534,9 @@
     jQuery('#mme-forgot-container').on('shown.bs.modal', function (e) {
         jQuery("#mme-forgot-username").focus().val("");
     })
+    jQuery("a[data-toggle=modal], button[data-toggle=modal]").on("click", (e)=> {
+        jQuery(jQuery(e.target).data("target")).modal("show");
+    });
     /* Open Modal */
     jQuery('.modal ').on('shown.bs.modal', function (e) {
         var modalName = $(this).data('modalName');
@@ -547,7 +562,7 @@
             jQuery('.content').css('z-index', '100');
             jQuery('.title').css('z-index', '101'); //101
         });
-    
+        jQuery("#place_order").off('click');
         jQuery("#place_order").on( 'click', ()=> {
             let payment_gateway = jQuery("#payment_method_mme_gateway").val();
             if(payment_gateway == "mme_gateway"){
