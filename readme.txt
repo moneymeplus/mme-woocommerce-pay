@@ -2,7 +2,7 @@
 Contributors: MoneyMe
 Tags: eCommerce, Payments, Finance
 Tested up to: 5.8
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GNU Public License
 License URI: https://www.gnu.org/licenses/
 
@@ -55,6 +55,12 @@ Contact hello@moneyme.com.au to learn how to design your own custom interest-fre
 3. Sample of order received confirmation.
 
 == Changelog ==
+1.0.2
+
+* Update analytics tracking
+* Fixed bugs of invalid password when adding coupon
+* Fixed issue of bootstrap not recognized when loading in wp_enque on other merchant
+
 1.0.1
 
 * Implemented analytics tracking

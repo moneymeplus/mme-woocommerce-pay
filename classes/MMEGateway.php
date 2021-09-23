@@ -40,6 +40,15 @@ function moneyme_gateway_init() {
 				'mme_username' => $this->username,
 				'mme_password' => $this->password
 			];
+			$site_url = get_site_url();
+			$qa_url = ['http://localhost/e-commerce/woo', 'http://10.0.1.6/woocommerce_dev', 'http://10.0.1.6/woocommerce', 'http://10.0.1.6/woocommerce_poc'];
+			$uat_url = ['http://10.0.1.6/woocommerce_int'];
+			if(in_array($site_url, $qa_url)) {
+				$config['qa'] = true;
+			}
+			if(in_array($site_url, $uat_url)) {
+				$config['uat'] = true;
+			}
 			$this->MME = new MMECustomer($config); 	
 		}
 	

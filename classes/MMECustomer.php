@@ -11,6 +11,12 @@ class MMECustomer extends MMECore
     {
         self::$USERNAME = $config['mme_username'];
         self::$PWD = $config['mme_password'];
+        if(isset($config['qa'])){
+            self::$SERVICE_URL = 'https://qa-horizonapi.moneyme.com.au/Mobile';
+        }
+        if(isset($config['uat'])){
+            self::$SERVICE_URL = 'https://horizonapi.moneyme.com.au/Mobile-integration';
+        }
         self::isAuthorized();
     }
     /**

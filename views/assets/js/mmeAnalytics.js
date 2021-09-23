@@ -5579,7 +5579,7 @@
     constructor(properties) {
       this.name = 'Action Element Clicked';
       this.id = '4b11b664-0563-4104-a36b-38bbb276be91';
-      this.version = '2.0.0';
+      this.version = '5.0.0';
       this.properties = properties;
     }
   
@@ -5591,7 +5591,7 @@
     constructor(properties) {
       this.name = 'Application Started';
       this.id = '180b1dcf-9601-4466-8410-629a11b3d7a6';
-      this.version = '2.0.0';
+      this.version = '4.0.0';
       this.properties = properties;
     }
   
@@ -5603,7 +5603,7 @@
     constructor(properties) {
       this.name = 'CSV Exported';
       this.id = '93424f9e-247e-4b32-aebc-d13e9ca2c4c4';
-      this.version = '1.0.1';
+      this.version = '3.0.0';
       this.properties = properties;
     }
   
@@ -5615,7 +5615,7 @@
     constructor(properties) {
       this.name = 'Modal Layer Displayed';
       this.id = '07733d1d-1489-4890-bcd3-8bece3d8ce8c';
-      this.version = '1.0.0';
+      this.version = '2.0.0';
       this.properties = properties;
     }
   
@@ -5627,7 +5627,7 @@
     constructor(properties) {
       this.name = 'Navigation Element Clicked';
       this.id = '2c02391e-f4a7-4088-99fd-9c9576d33d45';
-      this.version = '1.0.0';
+      this.version = '3.0.0';
       this.properties = properties;
     }
   
@@ -5639,7 +5639,7 @@
     constructor(properties) {
       this.name = 'User Log In Requested';
       this.id = '08098535-3785-4555-9874-a4fd7caad145';
-      this.version = '3.0.0';
+      this.version = '5.0.0';
       this.properties = properties;
     }
   
@@ -5666,7 +5666,7 @@
         ...options
       } = loadOptions;
       const destinationPlugins = destinations.all && destinations.all.disabled ? [] : [new _pluginIteratively.default(options.environment === 'production' ? '0e0wV1ai85wVnbeF-hP6Ce7VSiI4FRa-' : 'yossqaaBbtmMw9VMsZ-qHk2BbDnrpwqU', {
-        url: 'https://api.iterative.ly/t/version/4a85cfe2-705e-4bf1-9559-9ce88185275f',
+        url: 'https://api.iterative.ly/t/version/aa6237c4-0c92-48fa-8418-0791e00010da',
         environment: options.environment || 'development',
         ...destinations.iteratively
       })];
@@ -5675,8 +5675,39 @@
           'identify': {
             "type": "object",
             "properties": {
+              "brand": {
+                "enum": ["money-me-plus", "autopay", "listready", "freestyle", "pl", "rentready"]
+              },
+              "userType": {
+                "enum": ["partner", "customer", "system", "horizonuser"]
+              },
+              "leadsource": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "leadSourceDateCreated": {
+                "type": "string"
+              },
+              "accountCreated": {
+                "type": "string"
+              },
               "email": {
                 "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": ["brand", "userType"]
+          },
+          'page': {
+            "type": "object",
+            "properties": {
+              "userType": {
+                "enum": ["partner", "customer", "system", "horizonuser"]
+              },
+              "brand": {
+                "enum": ["money-me-plus", "autopay", "listready", "freestyle", "pl", "rentready"]
               }
             },
             "additionalProperties": false,
@@ -5686,44 +5717,59 @@
             "type": "object",
             "properties": {
               "objectContext": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               },
               "elementName": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               },
               "elementValues": {
                 "type": "object"
               },
-              "actionName": {
-                "type": "string"
-              },
-              "objectContextId": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "required": ["actionName"]
-          },
-          'Application Started': {
-            "type": "object",
-            "properties": {
-              "brand": {
-                "type": "string"
-              },
               "userType": {
-                "type": "string"
-              },
-              "locationOfAction": {
-                "type": "string"
-              },
-              "pageName": {
                 "type": "string"
               },
               "platform": {
                 "type": "string"
               },
-              "integrationProvider": {
+              "actionName": {
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
+              },
+              "objectContextId": {
                 "type": "string"
+              },
+              "brand": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": ["userType", "platform", "actionName", "brand"]
+          },
+          'Application Started': {
+            "type": "object",
+            "properties": {
+              "brand": {
+                "enum": ["money-me-plus", "autopay", "rentready", "listready", "freestyle", "pl"]
+              },
+              "userType": {
+                "enum": ["customer", "partner", "system", "horizonuser"]
+              },
+              "locationOfAction": {
+                "type": "string"
+              },
+              "pageName": {
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
+              },
+              "platform": {
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
+              },
+              "integrationProvider": {
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               }
             },
             "additionalProperties": false,
@@ -5733,10 +5779,10 @@
             "type": "object",
             "properties": {
               "brand": {
-                "type": "string"
+                "enum": ["money-me-plus", "autopay", "rentready", "listready", "freestyle", "pl"]
               },
               "userType": {
-                "type": "string"
+                "enum": ["customer", "partner", "system", "horizonuser"]
               },
               "locationOfAction": {
                 "type": "string"
@@ -5752,10 +5798,12 @@
             "type": "object",
             "properties": {
               "platform": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               },
               "modalName": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               },
               "locationOfAction": {
                 "type": "string"
@@ -5768,16 +5816,18 @@
             "type": "object",
             "properties": {
               "brand": {
-                "type": "string"
+                "enum": ["money-me-plus", "autopay", "rentready", "listready", "freestyle", "pl"]
               },
               "userType": {
-                "type": "string"
+                "enum": ["customer", "partner", "system", "horizonuser"]
               },
               "linkName": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               },
               "platform": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^$|^[a-z]+(-[a-z]+)*$"
               }
             },
             "additionalProperties": false,
@@ -5787,10 +5837,10 @@
             "type": "object",
             "properties": {
               "brand": {
-                "type": "string"
+                "enum": ["money-me-plus", "autopay", "rentready", "listready", "freestyle", "pl"]
               },
               "userType": {
-                "type": "string"
+                "enum": ["customer", "partner", "system", "horizonuser"]
               },
               "userName": {
                 "type": "string"
@@ -5822,7 +5872,13 @@
     /**
      * Identify a user and set or update that user's properties.
      * @param {string} [userId] The user's ID.
-     * @param {Object} [properties] The user's properties.
+     * @param {Object} properties The user's properties.
+     * @param {string} properties.brand The brands that the user belongs to.
+     * @param {string} properties.userType userType value most recently observed for this user.
+     * @param {string} [properties.leadsource] user's leadsource
+     * @param {string} [properties.name] current user's fullname
+     * @param {string} [properties.leadSourceDateCreated] lead source date created
+     * @param {string} [properties.accountCreated] user account date and time created
      * @param {string} [properties.email] current user's email or username in email format
      * @param {IdentifyOptions} [options] Options for this identify call.
      */
@@ -5842,15 +5898,18 @@
       this.itly.group(groupId, undefined, options);
     }
     /**
-     * Track a page view.
+     * Track a page view with a set of page properties.
      * @param {string} category The page's category.
      * @param {string} name The page's name.
+     * @param {Object} [properties] Additional page properties.
+     * @param {string} [properties.userType] Property has no description in tracking plan.
+     * @param {string} [properties.brand] Property has no description in tracking plan.
      * @param {PageOptions} [options] Options for this page call.
      */
   
   
-    page(category, name, options) {
-      this.itly.page(category, name, undefined, options);
+    page(category, name, properties, options) {
+      this.itly.page(category, name, properties, options);
     }
     /**
      * Generic event for any actions done on front end
@@ -5860,8 +5919,11 @@
      * @param {string} [properties.objectContext] Property has no description in tracking plan.
      * @param {string} [properties.elementName] Property has no description in tracking plan.
      * @param {Object} [properties.elementValues] Property has no description in tracking plan.
+     * @param {string} properties.userType Property has no description in tracking plan.
+     * @param {string} properties.platform Property has no description in tracking plan.
      * @param {string} properties.actionName Property has no description in tracking plan.
      * @param {string} [properties.objectContextId] Property has no description in tracking plan.
+     * @param {string} properties.brand Property has no description in tracking plan.
      * @param {TrackOptions} [options] Options for this track call.
      */
   
@@ -5908,7 +5970,7 @@
      * 
      * Owner: Steven Lucas
      * @param {Object} properties The event's properties.
-     * @param {string} properties.platform platform where event was triggered from. \[web, mobile, system\]
+     * @param {string} properties.platform platform where event was triggered from. \[web, mobile, system, eCommerce\]
      * @param {string} properties.modalName Name or label of modal
      * @param {string} properties.locationOfAction Page or screen name
      * @param {TrackOptions} [options] Options for this track call.

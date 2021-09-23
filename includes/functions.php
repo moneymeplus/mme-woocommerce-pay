@@ -215,9 +215,9 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 
   function mme_checkout_enqueue_script() {
     $plugin_url = plugin_dir_url( __DIR__ );
-
+    wp_enqueue_script('jquery');
     wp_enqueue_script( 'proper', $plugin_url . 'views/assets/js/proper.js' );
-    wp_enqueue_script( 'mod-bs-js', $plugin_url . 'views/assets/js/bootstrap.min.js', ['jquery'], '', true );
+    //wp_enqueue_script( 'mod-bs-js', $plugin_url . 'views/assets/js/bootstrap.min.js', ['jquery']);
     wp_enqueue_script( 'init-rs-js', $plugin_url . 'views/assets/js/rs-analytics.js', [], '', true );
     wp_enqueue_script( 'rs-tp', 'https://cdn.rudderlabs.com/v1/rudder-analytics.min.js', [], '', true );
     wp_enqueue_script( 'mme-analytics', $plugin_url . 'views/assets/js/mmeAnalytics.js', [], '', true );
