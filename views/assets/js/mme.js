@@ -1,6 +1,8 @@
+
 (function ( $ ) { 
     jQuery( 'body' ).on( 'updated_checkout', ()=> {
-    var mmeBrand = 'MoneyMe+';
+        
+    var mmeBrand = 'money-me-plus';
     var mmeUserType = 'customer';
     var mmeProvider = 'woocommerce';
     var mmePlatform = 'ecommerce';
@@ -534,9 +536,7 @@
     jQuery('#mme-forgot-container').on('shown.bs.modal', function (e) {
         jQuery("#mme-forgot-username").focus().val("");
     })
-    jQuery("a[data-toggle=modal], button[data-toggle=modal]").on("click", (e)=> {
-        jQuery(jQuery(e.target).data("target")).modal("show");
-    });
+
     /* Open Modal */
     jQuery('.modal ').on('shown.bs.modal', function (e) {
         var modalName = $(this).data('modalName');
@@ -611,3 +611,10 @@
         }, 1000)
         
     }
+    let bsScript = document.createElement("script");
+    bsScript.setAttribute("src", "/e-commerce/woo/wp-content/plugins/moneyme-payments-for-woocommerce/views/assets/js/bootstrap.min.js");
+    document.head.appendChild(bsScript);
+    jQuery("button[data-toggle=modal], a[data-toggle=modal]").on("click", (e)=> {
+        jQuery(jQuery(e.target).data("target")).modal("toggle");
+    })
+    
