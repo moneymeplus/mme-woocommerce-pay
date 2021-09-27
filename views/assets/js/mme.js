@@ -562,6 +562,7 @@
             jQuery('.content').css('z-index', '100');
             jQuery('.title').css('z-index', '101'); //101
         });
+        /*
         jQuery("#place_order").off('click');
         jQuery("#place_order").on( 'click', ()=> {
             let payment_gateway = jQuery("#payment_method_mme_gateway").val();
@@ -597,6 +598,7 @@
         });
     });
     //end
+    */
     }( jQuery ));
     var urlParams = new URLSearchParams(window.location.search);
     var mme_redirect = urlParams.get('mme_redirect_data');

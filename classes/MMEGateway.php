@@ -119,11 +119,12 @@ function moneyme_gateway_init() {
 				wc_add_notice('Total checkout amount is not valid for MoneyMe+ payment. MoneyMe+ accept checkout worth greater or equal to $1000', 'error' );
 				return false;
 			}
-
+			/*
 			if(!isset($_POST['_mme_token'])){
 				wc_add_notice(  'Please continue by logging in your MoneyMe+ account on the modal.', 'error' );
 				return false;
 			}
+			*/
 			return true;
 		}
 		
@@ -201,7 +202,27 @@ function moneyme_gateway_init() {
 		 * @return array
 		 */
 		public function process_payment( $order_id ) {
+			/*
+			$order = wc_get_order(349 );
+			$order->payment_complete();
+			
+			// Reduce stock levels
+			$order->reduce_order_stock();
+			
+			// Remove cart
+			WC()->cart->empty_cart();
+			
+			// Return thankyou redirect
+			return array(
+				'result' 	=> 'success',
+				'redirect'	=> $this->get_return_url( $order )
+			);
+			*/
 			$order = wc_get_order( $order_id );
+			wc_add_notice( $order, 'error' );
+			return false;
+			//wp_delete_post(348,true);
+			//WC()->cart->empty_cart();
 			global $woocommerce;
 			$items = $woocommerce->cart->get_cart();
 			$cartItems = [];
