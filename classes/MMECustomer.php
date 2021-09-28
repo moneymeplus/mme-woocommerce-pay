@@ -72,6 +72,18 @@ class MMECustomer extends MMECore
         return self::call(self::$SERVICE_URL.'/api/Pin/SendForgotPasscodeEmail', $header, 'post', $content);
     }
 
+    public function createRedirectUrl($post){
+        $header[] = "Content-Type: application/json";
+        $content = json_encode(['FirstName' => "WagtestFirstname", 'LastName' => "WagtestLastname1", 'MiddleName' => "Wagtestmiddlename1", "MobileNumber" => "04131232123", "CheckoutUrl" => "http://localhost/e-commerce/woo", "CheckoutDescription" => "test description new", "EmailAddress" => "wagtestmail@test.com", "ExternalOrderId" => $post['order_id'], "CheckoutAmount" => 1030]);
+        return self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/CreateEcommercePartnerApp', $header, 'post', $content, true);
+    }
+
+    public function checkPaymentStatus($post){
+        $header[] = "Content-Type: application/json";
+        $content = json_encode(['ExternalOrderId' => $post['order_id'], 'Amount' => 1040]);
+        return self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/CheckPartnerAppStatus', $header, 'post', $content, true);
+    }
+
     public function checkAccountExists($post){
         $header[] = "Content-Type: application/json";
         $content = json_encode(['LastName' => $post['mme_billing_last_name'], 'MobileNumber' => $post['mme_billing_phone'], 'EmailAddress' => $post['mme_billing_email']]);

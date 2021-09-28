@@ -219,8 +219,17 @@ function moneyme_gateway_init() {
 			);
 			*/
 			$order = wc_get_order( $order_id );
-			wc_add_notice( $order, 'error' );
-			return false;
+			//wc_add_notice( $order, 'error' );
+			//return false;
+			$response = $this->MME->createRedirectUrl(["order_id" => $order_id]);
+			//header("Location: {$response->RedirectUrl}");
+			//wc_add_notice( $response->RedirectUrl, 'error' );
+			return array(
+				'result' 	=> 'success',
+				'redirect'	=> $response->RedirectUrl
+			);
+			//return false;
+			die();
 			//wp_delete_post(348,true);
 			//WC()->cart->empty_cart();
 			global $woocommerce;

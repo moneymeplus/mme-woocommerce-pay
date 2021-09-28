@@ -230,7 +230,15 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
       $order = wc_get_order( $order_id );
       $order->update_status( 'completed' );
   }
-  
+  function mme_checkout_handler(){
+    $obj = new MMEGateway();
+    echo "<pre>";
+    $response = $obj->MME->checkPaymentStatus(["order_id" => 355]);
+    print_r($response);
+    //$response = $obj->MME->createRedirectUrl(["order_id" => 401]);
+    //header("Location: {$response->RedirectUrl}");
+    die();
+  }
   add_action('wp_ajax_login_mme_customer', 'login_mme_customer_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_login_mme_customer', 'login_mme_customer_handler');
 
@@ -249,6 +257,8 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   add_action('wp_ajax_mme_cart_items', 'mme_cart_items_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_mme_cart_items', 'mme_cart_items_handler');
 
+  add_action('wp_ajax_mme_checkout', 'mme_checkout_handler'); // wp_ajax_{action}
+  add_action('wp_ajax_nopriv_mme_checkout', 'mme_checkout_handler');
 
   add_action( 'wp_enqueue_scripts', 'mme_checkout_enqueue_styles' );
   add_action( 'wp_enqueue_scripts', 'mme_checkout_enqueue_script' );

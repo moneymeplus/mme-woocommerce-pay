@@ -1,5 +1,8 @@
 
 (function ( $ ) { 
+    jQuery( 'body' ).on( 'init_checkout', ()=> {
+        console.log("test");
+    });
     jQuery( 'body' ).on( 'updated_checkout', ()=> {
         
     var mmeBrand = 'money-me-plus';
@@ -562,9 +565,9 @@
             jQuery('.content').css('z-index', '100');
             jQuery('.title').css('z-index', '101'); //101
         });
-        /*
-        jQuery("#place_order").off('click');
-        jQuery("#place_order").on( 'click', ()=> {
+        
+        jQuery("#place_order_draft").off('click');
+        jQuery("#place_order_draft").on( 'click', ()=> {
             let payment_gateway = jQuery("#payment_method_mme_gateway").val();
             if(payment_gateway == "mme_gateway"){
                 if(jQuery("#mme-proceed-pay").length > 0){
@@ -598,8 +601,8 @@
         });
     });
     //end
-    */
-    }( jQuery ));
+    
+    }(jQuery));
     var urlParams = new URLSearchParams(window.location.search);
     var mme_redirect = urlParams.get('mme_redirect_data');
     if(mme_redirect){
@@ -619,4 +622,3 @@
     jQuery("button[data-toggle=modal], a[data-toggle=modal]").on("click", (e)=> {
         jQuery(jQuery(e.target).data("target")).modal("toggle");
     })
-    
