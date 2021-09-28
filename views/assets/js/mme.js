@@ -612,7 +612,7 @@
         
     }
     let bsScript = document.createElement("script");
-    bsScript.setAttribute("src", "/e-commerce/woo/wp-content/plugins/moneyme-payments-for-woocommerce/views/assets/js/bootstrap.min.js");
+    bsScript.setAttribute("src", "/wp-content/plugins/moneyme-payments-for-woocommerce/views/assets/js/bootstrap.min.js");
     document.head.appendChild(bsScript);
     jQuery("button[data-toggle=modal], a[data-toggle=modal]").on("click", (e)=> {
         jQuery(jQuery(e.target).data("target")).modal("toggle");
