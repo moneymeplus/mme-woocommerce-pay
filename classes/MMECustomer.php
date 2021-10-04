@@ -33,27 +33,6 @@ class MMECustomer extends MMECore
         return self::call(self::$SERVICE_URL.'/api/MmePlusEcommerceAccount/SignUp', $header, 'post', $content, true);
      }
 
-    /**
-     * @param 
-     * @return
-     */
-    public function requestPayment($post, $customer = false){
-        global $woocommerce;
-        $total = $woocommerce->cart->total;
-        $header[] = "Content-Type: application/json";
-        $query = http_build_query($post);
-        if($customer){
-            //$header[] = "Authorization: Bearer {$customer->AccessToken}";  
-            $content = json_encode(['Amount' => $total, 'ApplicationId' => $customer->ApplicationId, 'MerchantId' => $customer->MerchantId, 'CustomerId' => $customer->CustomerId]);
-        }
-        $response = self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/GetMmePlusRepayment', $header, 'post', $content, true);
-        if($response->RepaymentSchedule){
-            return (array) $response->RepaymentSchedule;
-        }else{
-            return ['status' => 'failed', 'message' => $response->Message];
-        }
-    }
-
     public function processPayment($post, $customer = false){
         $header[] = "Content-Type: application/json";
         $query = json_encode($post);
@@ -74,7 +53,7 @@ class MMECustomer extends MMECore
 
     public function createRedirectUrl($post){
         $header[] = "Content-Type: application/json";
-        $content = json_encode(['FirstName' => "WagtestFirstname", 'LastName' => "WagtestLastname1", 'MiddleName' => "Wagtestmiddlename1", "MobileNumber" => "04131232123", "CheckoutUrl" => "http://localhost/e-commerce/woo", "CheckoutDescription" => "test description new", "EmailAddress" => "wagtestmail@test.com", "ExternalOrderId" => $post['order_id'], "CheckoutAmount" => 1030]);
+        $content = json_encode($post);
         return self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/CreateEcommercePartnerApp', $header, 'post', $content, true);
     }
 
@@ -82,6 +61,12 @@ class MMECustomer extends MMECore
         $header[] = "Content-Type: application/json";
         $content = json_encode(['ExternalOrderId' => $post['order_id'], 'Amount' => 1040]);
         return self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/CheckPartnerAppStatus', $header, 'post', $content, true);
+    }
+
+    public function logOrderAsComplete($order_id){
+        $header[] = "Content-Type: application/json";
+        $content = json_encode(['ExternalOrderId' => $order_id]);
+        return self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/LogExternalOrderAsCompleted', $header, 'post', $content, true);
     }
 
     public function checkAccountExists($post){

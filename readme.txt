@@ -2,7 +2,7 @@
 Contributors: MoneyMe
 Tags: eCommerce, Payments, Finance
 Tested up to: 5.8
-Stable tag: 1.0.2
+Stable tag: 2.0.0
 License: GNU Public License
 License URI: https://www.gnu.org/licenses/
 

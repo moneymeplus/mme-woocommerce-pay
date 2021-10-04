@@ -90,9 +90,6 @@ function moneyme_gateway_init() {
 					'desc_tip'    => true,
 				),
 			) );
-			if(isset($_GET['cart_added'])){
-				echo wp_kses('<input type="hidden" id="mme-cart-added-temp" value="'.esc_attr($_GET['cart_added']).'" />', ['input' => ['type' => 'hidden', 'value' => esc_attr($_GET['cart_added']), 'id' => 'mme-cart-added-temp']]);
-			}
 		}
 		
 		public function payment_fields(){
@@ -104,9 +101,6 @@ function moneyme_gateway_init() {
 			
             $order_id = $woocommerce->session->order_awaiting_payment;
 			$order = wc_get_order( $order_id );
-			if ( $description = $this->get_description() ) {
-                //echo wpautop( wptexturize( $description ) );
-			}
 			$description = $this->description;
 			include_once(plugin_dir_path( __FILE__ ).'../views/mme-main.php');
 		}
@@ -119,12 +113,6 @@ function moneyme_gateway_init() {
 				wc_add_notice('Total checkout amount is not valid for MoneyMe+ payment. MoneyMe+ accept checkout worth greater or equal to $1000', 'error' );
 				return false;
 			}
-			/*
-			if(!isset($_POST['_mme_token'])){
-				wc_add_notice(  'Please continue by logging in your MoneyMe+ account on the modal.', 'error' );
-				return false;
-			}
-			*/
 			return true;
 		}
 		
@@ -154,47 +142,7 @@ function moneyme_gateway_init() {
 			}
 		}
 
-		/**
-		 * Signup request to MME Endpoint
-		 *
-		 * @access public
-		 * @param array $post
-		 */
-		public function signup( $post ) {
-			header('Content-type: application/json');
-			global $woocommerce;
-			$items = $woocommerce->cart->get_cart();
-			$cartItems = [];
-			foreach($items as $item => $values) { 
-				$_product =  wc_get_product( $values['data']->get_id()); 
-				$price =  $values['data']->get_price();
-				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
-				$full_title = $_product->get_title().$variation;
-				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
-				$pid[] = $values['data']->get_id();
-                $qty[] = $values['quantity'];
-			}
-			$signed_post = $post;
-			$signed_post['billing_phone'] = $signed_post['mme_billing_phone'];
-			$signed_post['billing_email'] = $signed_post['mme_billing_email'];
-			$signed_data = base64_encode(json_encode($signed_post));
-			$cart_added = strtotime("now");
-			$checkout_url_params = [
-				'action' => 'mme_cart_items',
-				'pid' => base64_encode(implode(",",$pid)),
-				'cart_added' => $cart_added,
-				'q' => base64_encode(implode(",",$qty)),
-				'ut' => strtotime("+28 days"),
-				'mme_redirect_data' => $signed_data
-			];
-			$checkout_url = site_url() . '/wp-admin/admin-ajax.php?'.http_build_query($checkout_url_params);
-			$checkout_url = urldecode($checkout_url);
-			$post["CheckoutDescription"] = implode(", ", $cartItems);
-			$post["CheckoutAmount"] = $woocommerce->cart->total;
-			$post['checkout_url'] = $checkout_url;
-			$create = $this->MME->createAccount($post);
-			return $create;
-		}
+		
 		/**
 		 * Process the payment and return the result
 		 *
@@ -202,38 +150,10 @@ function moneyme_gateway_init() {
 		 * @return array
 		 */
 		public function process_payment( $order_id ) {
-			/*
-			$order = wc_get_order(349 );
-			$order->payment_complete();
-			
-			// Reduce stock levels
-			$order->reduce_order_stock();
-			
-			// Remove cart
-			WC()->cart->empty_cart();
-			
-			// Return thankyou redirect
-			return array(
-				'result' 	=> 'success',
-				'redirect'	=> $this->get_return_url( $order )
-			);
-			*/
-			$order = wc_get_order( $order_id );
-			//wc_add_notice( $order, 'error' );
-			//return false;
-			$response = $this->MME->createRedirectUrl(["order_id" => $order_id]);
-			//header("Location: {$response->RedirectUrl}");
-			//wc_add_notice( $response->RedirectUrl, 'error' );
-			return array(
-				'result' 	=> 'success',
-				'redirect'	=> $response->RedirectUrl
-			);
-			//return false;
-			die();
-			//wp_delete_post(348,true);
-			//WC()->cart->empty_cart();
 			global $woocommerce;
-			$items = $woocommerce->cart->get_cart();
+			$order = wc_get_order( $order_id );
+			$wp_order = json_decode($order, TRUE);
+			$billing = $wp_order['billing'];
 			$cartItems = [];
 			foreach($items as $item => $values) { 
 				$_product =  wc_get_product( $values['data']->get_id()); 
@@ -241,80 +161,18 @@ function moneyme_gateway_init() {
 				$variation = count($values['variation'])>0 ? " - ".implode(", ",$values['variation']) : "";
 				$full_title = $_product->get_title().$variation;
 				$cartItems[] = $values['quantity'].'x '.$full_title.'. Total Order Amount: $'.number_format(($price * $values['quantity']), 2, '.', ',');
-				$pid[] = $values['data']->get_id();
-                $qty[] = $values['quantity'];
 				
 			}
-			$fields = ['billing_first_name', 'billing_last_name', 'billing_company', 'billing_country', 'billing_address_1', 'billing_address_2', 'billing_city', 'billing_state', 'billing_postcode', 'billing_phone', 'billing_email', 'mme_checkout_url'];
-			foreach($fields as $key){
-				if(isset($_POST[$key])){
-					if($key == 'billing_email'){
-						$signed_post[$key] = sanitize_email($_POST[$key]);
-					}else{
-						$signed_post[$key] = sanitize_text_field($_POST[$key]);
-					}
-					
-				}
-			}
-			$remove = array('order_comments', 'woocommerce-process-checkout-nonce', '_wp_http_referer', 'payment_method');
-			$signed_data = base64_encode(json_encode($signed_post));
-			$checkout_url_params = [
-				'action' => 'mme_cart_items',
-				'pid' => base64_encode(implode(",",$pid)),
-				'q' => base64_encode(implode(",",$qty)),
-				'mme_redirect_data' => $signed_data
-			];
-
-			$checkout_url = site_url() . '/wp-admin/admin-ajax.php?'.http_build_query($checkout_url_params);
-			$checkout_url = urldecode($checkout_url);
-			// Format Description: qty - title - id - price as requested by shaun
-			$items = implode(", ", $cartItems);
-			$customer = (object) ['AccessToken' => sanitize_text_field($_POST['_mme_token']), 'ApplicationId' => sanitize_text_field($_POST['_mme_application_id']), 'MerchantId' => sanitize_text_field($_POST['_mme_merchant_id']), 'CheckoutDescription' => $items, 'CheckoutUrl' => $checkout_url];
-			$response = $this->MME->processPayment(['amount' => $order->total], $customer);
+			$checkout_description = implode(", ", $cartItems);
+			$checkout_url = $this->get_return_url( $order );
+			$request = ['FirstName' => $billing['first_name'], 'LastName' => $billing['last_name'], 'MiddleName' => "", "MobileNumber" => $billing['phone'], "CheckoutUrl" => site_url()."/wp-admin/admin-ajax.php?action=mme_checkout&order_id={$order_id}&checkout_url={$checkout_url}", "CheckoutDescription" => $checkout_description, "EmailAddress" => $billing['email'], "ExternalOrderId" => $order_id, "CheckoutAmount" => $wp_order['total']];
 			
-			if(!$response->IsMMEPlusTransactionCreated){
-				if($response->Message){
-					wc_add_notice( $response->Message, 'error' );
-					return false;
-				}
-				$error = (object) json_decode($response->SystemErrorMessage);
-				wc_add_notice( $error->Message, 'error' );
-				return false;
-			}
-			//expire transient in 28 days
-			if($_POST['mme_cart_added']){
-				set_transient($_POST['mme_cart_added'], 1, 86400 * 28);
-			}
-			
-			$order->payment_complete();
-			
-			// Reduce stock levels
-			$order->reduce_order_stock();
-			
-			// Remove cart
-			WC()->cart->empty_cart();
-			
-			// Return thankyou redirect
+			$response = $this->MME->createRedirectUrl($request);
 			return array(
 				'result' 	=> 'success',
-				'redirect'	=> $this->get_return_url( $order )
+				'redirect'	=> $response->RedirectUrl
 			);
 		}
-
-		public function requestTemplate($payment_request){
-			global $customer;
-			global $eligible;
-			global $payment;
-			global $img;
-			global $woocommerce;
-
-			$customer = $this->MME::$CUSTOMER;
-			$eligible = $customer->Eligibility;
-			$payment = $payment_request;
-			$img = plugins_url( '../views/assets/images' , __FILE__ );
-			include_once(plugin_dir_path( __FILE__ ).'../views/mme-account.php');
-		}
-
 		public function process_refund( $order_id, $amount = null, $reason = '' ) {
 			// Do your refund here. Refund $amount for the order with ID $order_id
 			//return new WP_Error( 'broke', __( "I've fallen and can't get up", "my_textdomain" ) );
