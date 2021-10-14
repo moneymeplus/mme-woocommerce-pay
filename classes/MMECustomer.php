@@ -59,7 +59,7 @@ class MMECustomer extends MMECore
 
     public function checkPaymentStatus($post){
         $header[] = "Content-Type: application/json";
-        $content = json_encode(['ExternalOrderId' => $post['order_id'], 'Amount' => 1040]);
+        $content = json_encode(['ExternalOrderId' => $post['order_id'], 'Amount' => $post['order_total']]);
         return self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/CheckPartnerAppStatus', $header, 'post', $content, true);
     }
 

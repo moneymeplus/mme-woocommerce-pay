@@ -33,14 +33,25 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     if(!$order_id){
         wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
     }
+    $order = wc_get_order($order_id );
     $obj = new MMEGateway();
-    $response = $obj->MME->checkPaymentStatus(["order_id" => $order_id]);
-    if($response->Message == "Authorization has been denied for this request."){
-        wc_add_notice( __( 'Merchant is unauthorized. If you are the owner or admin of this website, kindly update your MoneyMe+ Woocommerce plugin credentials to fix this issue.', 'gateway' ), 'error' );
+    $response = $obj->MME->checkPaymentStatus(["order_id" => $order_id, "order_total" => $order->total]);
+    if(!$response){
+        wc_add_notice( __( 'MoneyMe+ is currently under maintenance. Please contact us on 1300 329 037 for urgent issues.', 'gateway' ), 'error' );
         wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
         exit;
     }
-    $order = wc_get_order($order_id );
+    if($response->Message){
+      if($response->Message == "Authorization has been denied for this request."){
+          wc_add_notice( __( 'Oops! This merchant’s MME+ details are incorrect. If you are the owner or admin of this website, please update your MoneyMe+ Woocommerce plugin to fix this issue.', 'gateway' ), 'error' );
+          wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
+          exit;
+      }else{
+          wc_add_notice( __($response->Message, 'gateway' ), 'error' );
+          wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
+          exit;
+      }
+    }
     if ($order->get_status() == "completed") {
       wp_redirect($checkout_url);
       exit;
@@ -52,19 +63,25 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     foreach ($items as $items_key => $items_value) { 
         $id = $items_value['variation_id'] ? $items_value['variation_id'] : $items_value['product_id'];
         $_product =  wc_get_product($id); 
-        if($items_value['qty'] > $_product->stock_quantity){
-            $item_err[] = $items_value['name'];
+        if($_product->stock_status == "outofstock"){
+          $item_err[] = $items_value['name'];
+        }else{
+          if($_product->managing_stock()){
+            if($items_value['qty'] > $_product->stock_quantity){
+                $item_err[] = $items_value['name'];
+            }
+          }
         }
-    }
-    if(count($item_err)){
-        wc_add_notice( __( 'One or more items in the cart requested is no longer available. If your credit limit in MoneyMe+ was deducted, kindly contact MoneyMe on 1300 844 349 to fix this issue. Items: '.implode(',', $item_err), 'gateway' ), 'error' );
-        wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
-        exit;
     }
     /* end checking of stocks vs items ordered */
     if($response->IsRedrawApproved){
+        if(count($item_err)){
+            wc_add_notice( __( "Unfortunately, one or more of the items in your cart is no longer available. Please contact the merchant to discuss the availability of this item/s.  If your credit limit in MoneyMe+ was deducted, kindly contact MoneyMe on 1300 844 349 to fix this issue.<br/>".'Item/s unavailable: ['.implode(',', $item_err).']', 'gateway' ), 'error' );
+            wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
+            exit;
+        }
         $woocommerce->cart->empty_cart();
-        $order->payment_complete();
+        $order->update_status('completed');
         $obj->MME->logOrderAsComplete($order_id);
         // Reduce stock levels
         $order->reduce_order_stock();
@@ -77,7 +94,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
           wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
           exit;
        }else{
-          wc_add_notice( __( 'MoneyMe+ is under maintenance. Contact us on 1300 329 037 for urgent issues.', 'gateway' ), 'error' );
+          wc_add_notice( __( 'MoneyMe+ is currently under maintenance. Please contact us on 1300 329 037 for urgent issues.', 'gateway' ), 'error' );
           wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
           exit;
        }
