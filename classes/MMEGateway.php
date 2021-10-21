@@ -88,12 +88,12 @@ function moneyme_gateway_init() {
 					'description' => __( 'Shown to customer at purchase completion on order confirmation page.', 'wc-gateway-mme' ),
 					'default'     => 'Congratulations on your purchase with MoneyMe+. Check your email for more information about your MoneyMe+ account.',
 					'desc_tip'    => true,
-				),
+				)
 			) );
 		}
 		
 		public function payment_fields(){
-			global $woocommerce, $img, $js, $css, $site_ep, $description;
+			global $woocommerce, $img, $js, $css, $site_ep, $description, $opt;
 			$img = plugins_url( '../views/assets/images' , __FILE__ );
 			$js = plugins_url( '../views/assets/js' , __FILE__ );
 			$css = plugins_url( '../views/assets/css' , __FILE__ );
@@ -102,6 +102,7 @@ function moneyme_gateway_init() {
             $order_id = $woocommerce->session->order_awaiting_payment;
 			$order = wc_get_order( $order_id );
 			$description = $this->description;
+			$opt = $this->option_name;
 			include_once(plugin_dir_path( __FILE__ ).'../views/mme-main.php');
 		}
 		
@@ -168,6 +169,8 @@ function moneyme_gateway_init() {
 			$request = ['FirstName' => $billing['first_name'], 'LastName' => $billing['last_name'], 'MiddleName' => "", "MobileNumber" => $billing['phone'], "CheckoutUrl" => site_url()."/wp-admin/admin-ajax.php?action=mme_checkout&order_id={$order_id}&checkout_url={$checkout_url}", "CheckoutDescription" => $checkout_description, "EmailAddress" => $billing['email'], "ExternalOrderId" => $order_id, "CheckoutAmount" => $wp_order['total']];
 			
 			$response = $this->MME->createRedirectUrl($request);
+			wc_add_notice(json_encode($response), 'error');
+			return false;
 			return array(
 				'result' 	=> 'success',
 				'redirect'	=> $response->RedirectUrl

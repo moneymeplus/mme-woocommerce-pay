@@ -27,6 +27,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
   function mme_checkout_handler(){
     //63009 = declined
     //63008 = approved
+    
     global $woocommerce;
     $checkout_url = sanitize_text_field($_GET['checkout_url']);
     $order_id = sanitize_text_field($_GET['order_id']);
@@ -34,6 +35,45 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
         wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
     }
     $order = wc_get_order($order_id );
+    
+    $woocommerce->cart->empty_cart();
+    $data = $order->data;
+    $billing = $order->data['billing'];
+    $firstname = $billing['first_name'];
+    $lastname = $billing['last_name'];
+    $company = $billing['company'];
+    $address_1 = $billing['address_1'];
+    $address_2 = $billing['address_2'];
+    $city = $billing['city'];
+    $state = $billing['state'];
+    $postcode = $billing['postcode'];
+    $country = $billing['country'];
+    $email = $billing['email'];
+    $phone = $billing['phone'];
+    
+    $woocommerce->customer->set_billing_first_name($firstname);
+    $woocommerce->customer->set_billing_last_name($lastname);
+    $woocommerce->customer->set_billing_company($company);
+    $woocommerce->customer->set_billing_address_1($address_1);
+    $woocommerce->customer->set_billing_address_2($address_2);
+    $woocommerce->customer->set_billing_city($city);
+    $woocommerce->customer->set_billing_state($state);
+    $woocommerce->customer->set_billing_postcode($postcode);
+    $woocommerce->customer->set_billing_country($country);
+    $woocommerce->customer->set_billing_email($email);
+    $woocommerce->customer->set_billing_phone($phone);
+    foreach ( $order->get_items() as $item_id => $item ) {
+      $product_id = $item->get_product_id();
+      $variation_id = $item->get_variation_id();
+      $quantity = $item->get_quantity();
+      if ($variation_id){
+        $product_id = $variation_id;
+      }
+      echo $product_id;
+      $woocommerce->cart->add_to_cart( $product_id, $quantity);
+   }
+   
+    exit;
     $obj = new MMEGateway();
     $response = $obj->MME->checkPaymentStatus(["order_id" => $order_id, "order_total" => $order->total]);
     if(!$response){
@@ -101,7 +141,15 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     }
     die();
   }
-
+  add_action('woocommerce_checkout_process', 'udfyld_ean_checkout_field_validation');
+  function udfyld_ean_checkout_field_validation() {
+  if ( $_POST['payment_method'] === 'mme_gateway' && isset($_POST['udfyld_ean']) && empty($_POST['udfyld_ean']) )
+      wc_add_notice( __( 'Please enter your "Udfyld EAN" number.' ), 'error' );
+  }
+  add_action('woocommerce_checkout_create_order', 'save_udfyld_ean_to_order_meta_data', 10, 4 );
+  function save_udfyld_ean_to_order_meta_data( $order, $data ) {
+    $order->update_meta_data( 'udfyld_ean', sanitize_text_field( $_POST['udfyld_ean'] ) );
+  }
   add_action('wp_ajax_mme_checkout', 'mme_checkout_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_mme_checkout', 'mme_checkout_handler');
 
