@@ -3,6 +3,7 @@
 <?php endif;?>
 <div id="container-mme" class="m-442218 mme-gateway">
     <input type="hidden" id="mme-endpoint" value="<?php echo esc_url($site_ep);?>" />
+    <input type="hidden" id="mme-site-url" value="<?php echo get_site_url();?>" />
     <div class="mme-border">
         <h3 class="mme-h3">Shop now & pay later</h3>
         <p><?php echo esc_html($description);?></p>

@@ -224,12 +224,6 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     wp_enqueue_script( 'mme-analytics-custom', $plugin_url . 'views/assets/js/mmeAnalyticsCustomDestination.js', [], '', true );
     wp_enqueue_script( 'mme-custom', plugin_dir_url( __FILE__ ). '../views/assets/js/mme.js', '', '', true);
   }
-  add_action( 'woocommerce_payment_complete', 'my_change_status_function' );
-
-  function my_change_status_function( $order_id ) {
-      $order = wc_get_order( $order_id );
-      $order->update_status( 'completed' );
-  }
   
   add_action('wp_ajax_login_mme_customer', 'login_mme_customer_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_login_mme_customer', 'login_mme_customer_handler');

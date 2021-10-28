@@ -2,7 +2,7 @@
 Contributors: MoneyMe
 Tags: eCommerce, Payments, Finance
 Tested up to: 5.8
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GNU Public License
 License URI: https://www.gnu.org/licenses/
 
@@ -55,6 +55,11 @@ Contact hello@moneyme.com.au to learn how to design your own custom interest-fre
 3. Sample of order received confirmation.
 
 == Changelog ==
+1.0.3
+
+* Update payment status to processing after payment instead of completed
+* dynamically load bootstrap depending on merchant's site url
+
 1.0.2
 
 * Update analytics tracking

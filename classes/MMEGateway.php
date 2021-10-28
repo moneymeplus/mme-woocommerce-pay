@@ -41,7 +41,7 @@ function moneyme_gateway_init() {
 				'mme_password' => $this->password
 			];
 			$site_url = get_site_url();
-			$qa_url = ['http://localhost/e-commerce/woo', 'http://10.0.1.6/woocommerce_dev', 'http://10.0.1.6/woocommerce', 'http://10.0.1.6/woocommerce_poc'];
+			$qa_url = ['http://localhost/e-commerce/woo', 'http://10.0.1.6/woocommerce_dev', 'http://10.0.1.6/woocommerce', 'http://10.0.1.6/woocommerce_poc', 'http://10.2.0.6/woocommerce_dev', 'http://10.2.0.6/woocommerce'];
 			$uat_url = ['http://10.0.1.6/woocommerce_int'];
 			if(in_array($site_url, $qa_url)) {
 				$config['qa'] = true;
@@ -256,7 +256,7 @@ function moneyme_gateway_init() {
 				set_transient($_POST['mme_cart_added'], 1, 86400 * 28);
 			}
 			
-			$order->payment_complete();
+			$order->update_status("processing");
 			
 			// Reduce stock levels
 			$order->reduce_order_stock();
