@@ -165,7 +165,8 @@ function moneyme_gateway_init() {
 			}
 			$checkout_description = implode(", ", $cartItems);
 			$checkout_url = $this->get_return_url( $order );
-			$request = ['FirstName' => $billing['first_name'], 'LastName' => $billing['last_name'], 'MiddleName' => "", "MobileNumber" => $billing['phone'], "CheckoutUrl" => site_url()."/wp-admin/admin-ajax.php?action=mme_checkout&order_id={$order_id}&checkout_url={$checkout_url}", "CheckoutDescription" => $checkout_description, "EmailAddress" => $billing['email'], "ExternalOrderId" => $order_id, "CheckoutAmount" => $wp_order['total']];
+			$encoded_orderid = base64_encode(get_site_url()).':'.$order_id;
+			$request = ['FirstName' => $billing['first_name'], 'LastName' => $billing['last_name'], 'MiddleName' => "", "MobileNumber" => $billing['phone'], "CheckoutUrl" => site_url()."/wp-admin/admin-ajax.php?action=mme_checkout&order_id={$order_id}&checkout_url={$checkout_url}", "CheckoutDescription" => $checkout_description, "EmailAddress" => $billing['email'], "ExternalOrderId" => $encoded_orderid, "CheckoutAmount" => $wp_order['total']];
 			
 			$response = $this->MME->createRedirectUrl($request);
 			return array(

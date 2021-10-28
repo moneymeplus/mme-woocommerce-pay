@@ -36,7 +36,8 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     }
     $order = wc_get_order($order_id );
     $obj = new MMEGateway();
-    $response = $obj->MME->checkPaymentStatus(["order_id" => $order_id, "order_total" => $order->total]);
+    $encoded_orderid = base64_encode(get_site_url()).':'.$order_id;
+    $response = $obj->MME->checkPaymentStatus(["order_id" => $encoded_orderid, "order_total" => $order->total]);
     if(!$response){
         wc_add_notice( __( 'MoneyMe+ is currently under maintenance. Please contact us on 1300 329 037 for urgent issues.', 'gateway' ), 'error' );
         wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
@@ -53,7 +54,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
           exit;
       }
     }
-    if ($order->get_status() == "completed") {
+    if ($order->get_status() == "processing") {
       wp_redirect($checkout_url);
       exit;
     }
@@ -82,7 +83,7 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
             exit;
         }
         $woocommerce->cart->empty_cart();
-        $order->update_status('completed');
+        $order->update_status('processing');
         $obj->MME->logOrderAsComplete($order_id);
         // Reduce stock levels
         $order->reduce_order_stock();
@@ -121,18 +122,22 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
             $woocommerce->customer->set_billing_country($country);
             $woocommerce->customer->set_billing_email($email);
             $woocommerce->customer->set_billing_phone($phone);
-            foreach ( $order->get_items() as $item_id => $item ) {
-                $product_id = $item->get_product_id();
-                $variation_id = $item->get_variation_id();
-                $quantity = $item->get_quantity();
-                if ($variation_id){
-                  $product_id = $variation_id;
-                }
-                $woocommerce->cart->add_to_cart( $product_id, $quantity);
+            wc_add_notice( __( 'Awesome! Your MoneyMe Plus account has been approved. Please reselect MoneyMe Plus as the payment option and login to complete your purchase.', 'gateway' ), 'notice' );
+            if(count($item_err)){
+                wc_add_notice( __( "Unfortunately, one or more of the items in your cart is no longer available. Please contact the merchant to discuss the availability of this item/s.  If your credit limit in MoneyMe+ was deducted, kindly contact MoneyMe on 1300 844 349 to fix this issue.<br/>".'Item/s unavailable: ['.implode(',', $item_err).']', 'gateway' ), 'error' );
+            }else{
+              foreach ( $order->get_items() as $item_id => $item ) {
+                  $product_id = $item->get_product_id();
+                  $variation_id = $item->get_variation_id();
+                  $quantity = $item->get_quantity();
+                  if ($variation_id){
+                    $product_id = $variation_id;
+                  }
+                  $woocommerce->cart->add_to_cart( $product_id, $quantity);
+              }
             }
           $order->update_status('cancelled');
           $order->add_order_note( 'Customer has successfully signed for an MME+ account and was redirected back to your website to complete a new order.');
-          wc_add_notice( __( 'Awesome! Your MoneyMe Plus account has been approved. Please reselect MoneyMe Plus as the payment option and login to complete your purchase.', 'gateway' ), 'notice' );
           wp_safe_redirect( wc_get_page_permalink( 'checkout' ) );
           exit;
        }else{
