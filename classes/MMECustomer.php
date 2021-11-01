@@ -33,6 +33,12 @@ class MMECustomer extends MMECore
         return self::call(self::$SERVICE_URL.'/api/MmePlusEcommerceAccount/SignUp', $header, 'post', $content, true);
      }
 
+     public function getInterestFreePeriod (){
+        $header[] = "Content-Type: application/json";
+        $response = self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/GetPartnersInterestFreeOptions', $header, 'get', '', TRUE);
+        return $response;
+    }
+
     public function processPayment($post, $customer = false){
         $header[] = "Content-Type: application/json";
         $query = json_encode($post);

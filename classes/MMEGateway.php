@@ -41,7 +41,7 @@ function moneyme_gateway_init() {
 				'mme_password' => $this->password
 			];
 			$site_url = get_site_url();
-			$qa_url = ['http://localhost/e-commerce/woo', 'http://10.0.1.6/woocommerce_dev', 'http://10.0.1.6/woocommerce', 'http://10.0.1.6/woocommerce_poc', 'http://10.2.0.6/woocommerce_poc'];
+			$qa_url = ['http://localhost/e-commerce/woo', 'http://10.0.1.6/woocommerce_dev', 'http://10.0.1.6/woocommerce', 'http://10.0.1.6/woocommerce_poc', 'http://10.2.0.6/woocommerce', 'http://10.2.0.6/woocommerce_dev', 'http://10.2.0.6/woocommerce_poc'];
 			$uat_url = ['http://10.0.1.6/woocommerce_int', 'http://10.2.0.6/woocommerce_int'];
 			if(in_array($site_url, $qa_url)) {
 				$config['qa'] = true;
@@ -93,7 +93,7 @@ function moneyme_gateway_init() {
 		}
 		
 		public function payment_fields(){
-			global $woocommerce, $img, $js, $css, $site_ep, $description;
+			global $woocommerce, $img, $js, $css, $site_ep, $description, $interest_free;
 			$img = plugins_url( '../views/assets/images' , __FILE__ );
 			$js = plugins_url( '../views/assets/js' , __FILE__ );
 			$css = plugins_url( '../views/assets/css' , __FILE__ );
@@ -102,6 +102,7 @@ function moneyme_gateway_init() {
             $order_id = $woocommerce->session->order_awaiting_payment;
 			$order = wc_get_order( $order_id );
 			$description = $this->description;
+			$interest_free = $this->MME->getInterestFreePeriod();
 			include_once(plugin_dir_path( __FILE__ ).'../views/mme-main.php');
 		}
 		
@@ -111,6 +112,10 @@ function moneyme_gateway_init() {
 			$customer = get_transient('customer');
 			if($woocommerce->cart->total < 1000){
 				wc_add_notice('Total checkout amount is not valid for MoneyMe+ payment. MoneyMe+ accept checkout worth greater or equal to $1000', 'error' );
+				return false;
+			}
+			if (isset($_POST['mme_interest_free']) && empty($_POST['mme_interest_free'])){
+				wc_add_notice( __( 'Please select your interest free period' ), 'error' );
 				return false;
 			}
 			return true;
@@ -166,7 +171,8 @@ function moneyme_gateway_init() {
 			$checkout_description = implode(", ", $cartItems);
 			$checkout_url = $this->get_return_url( $order );
 			$encoded_orderid = base64_encode(get_site_url()).':'.$order_id;
-			$request = ['FirstName' => $billing['first_name'], 'LastName' => $billing['last_name'], 'MiddleName' => "", "MobileNumber" => $billing['phone'], "CheckoutUrl" => site_url()."/wp-admin/admin-ajax.php?action=mme_checkout&order_id={$order_id}&checkout_url={$checkout_url}", "CheckoutDescription" => $checkout_description, "EmailAddress" => $billing['email'], "ExternalOrderId" => $encoded_orderid, "CheckoutAmount" => $wp_order['total']];
+			$interest_free_id = sanitize_text_field( $_POST['mme_interest_free'] );
+			$request = ['FirstName' => $billing['first_name'], 'LastName' => $billing['last_name'], 'MiddleName' => "", "MobileNumber" => $billing['phone'], "CheckoutUrl" => site_url()."/wp-admin/admin-ajax.php?action=mme_checkout&order_id={$order_id}&checkout_url={$checkout_url}", "CheckoutDescription" => $checkout_description, "EmailAddress" => $billing['email'], "ExternalOrderId" => $encoded_orderid, "CheckoutAmount" => $wp_order['total'], 'PartnersInterestFreeId' => $interest_free_id];
 			
 			$response = $this->MME->createRedirectUrl($request);
 			return array(

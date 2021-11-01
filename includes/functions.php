@@ -149,6 +149,10 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     die();
   }
 
+  add_action('woocommerce_checkout_create_order', 'save_interest_free_to_order_meta_data', 10, 4 );
+  function save_interest_free_to_order_meta_data( $order, $data ) {
+      $order->update_meta_data( 'mme_interest_free', sanitize_text_field( $_POST['mme_interest_free'] ) );
+  }
   add_action('wp_ajax_mme_checkout', 'mme_checkout_handler'); // wp_ajax_{action}
   add_action('wp_ajax_nopriv_mme_checkout', 'mme_checkout_handler');
 
