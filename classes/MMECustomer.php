@@ -45,6 +45,12 @@ class MMECustomer extends MMECore
         return $response;
     }
 
+    public function getInterestFreePeriod (){
+        $header[] = "Content-Type: application/json";
+        $response = self::call(self::$SERVICE_URL.'/api/MmePlusEcommercePay/GetPartnersInterestFreeOptions', $header, 'get', '', TRUE);
+        return $response;
+    }
+
     public function sendForgotPinEmail($post){
         $header[] = "Content-Type: application/json";
         $content = json_encode(['BrandId' => 1, 'Username' => $post['email']]);

@@ -29,6 +29,9 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
     //63008 = approved
     
     global $woocommerce;
+
+    $obj = new MMEGateway();
+    $response = $obj->MME->getInterestFreePeriod();
     $checkout_url = sanitize_text_field($_GET['checkout_url']);
     $order_id = sanitize_text_field($_GET['order_id']);
     if(!$order_id){
@@ -73,7 +76,6 @@ if ( ! function_exists( 'is_woocommerce_activated' ) ) {
       $woocommerce->cart->add_to_cart( $product_id, $quantity);
    }
    
-    exit;
     $obj = new MMEGateway();
     $response = $obj->MME->checkPaymentStatus(["order_id" => $order_id, "order_total" => $order->total]);
     if(!$response){
