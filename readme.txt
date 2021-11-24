@@ -55,6 +55,17 @@ Contact hello@moneyme.com.au to learn how to design your own custom interest-fre
 3. Sample of order received confirmation.
 
 == Changelog ==
+2.0.0
+
+* New checkout process. Implement express checkout instead of direct payment method.
+* Removed Login and Signup from merchant's website
+
+1.0.3
+
+* Fixed bugs when adding coupon
+* Update status from completed to processing after redraw/payment
+* Load bootstrap dynamically based on site url
+
 1.0.2
 
 * Update analytics tracking
